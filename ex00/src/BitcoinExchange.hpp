@@ -43,14 +43,16 @@ private:
   BitcoinExchange();
   BitcoinExchange(const BitcoinExchange &);
   BitcoinExchange &operator=(const BitcoinExchange &);
-  bool parseRateDatabase();
-  bool parsePriceDatabase();
-  bool isDate(const std::string &) const;
+  bool parseRateData();
+  bool parsePriceData();
+  bool parseDate(const std::string &, Date &) const;
   bool isValidPrice(const std::string &) const;
-  double findClosetPrice() const;
-  double findClosetRate() const;
+  double findClosetPrice(const Date &) const;
+  double findClosetRate(const Date &) const;
+  double calcValue(const Date &) const;
+  std::string readFile(const std::string &) const;
 
-  static const char *kRateDatabaseFile_ = "";
+  static const char *kRateDataFile_;
   static const int kMinPrice_ = 0;
   static const int kMaxPrice_ = 1000;
 };
