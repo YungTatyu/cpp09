@@ -33,6 +33,7 @@ class BitcoinExchange {
 public:
   BitcoinExchange(const std::string &);
   ~BitcoinExchange();
+  bool run();
 
   std::string raw_rate_data_;
   std::string raw_price_data_;
@@ -43,6 +44,7 @@ private:
   BitcoinExchange();
   BitcoinExchange(const BitcoinExchange &);
   BitcoinExchange &operator=(const BitcoinExchange &);
+  bool setup();
   bool parseRateData();
   bool parsePriceData();
   bool parseDate(const std::string &, Date &) const;
