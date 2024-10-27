@@ -8,7 +8,7 @@
 struct Token {
   enum Type { KNum, KOperator, KOther };
 
-  Token(const std::string token, Type type) {
+  Token(const std::string &token, Type type) {
     token_ = token;
     type_ = type;
   }
@@ -34,6 +34,8 @@ private:
   RPN();
   void Tokenize();
   void ParseAndEvaluate();
+  bool IsOperator(char) const;
+  void AddToken(const std::string &, Token::Type);
 
   std::string line_;
   std::vector<Token> tokens_;
@@ -49,10 +51,10 @@ public:
   ~RPN();
   RPN &operator=(const RPN &);
   long Calculate();
-  long getMin() const;
-  void setMin();
-  long getMax() const;
-  void setMax();
+  long GetMin() const;
+  void SetMin(long);
+  long GetMax() const;
+  void SetMax(long);
 };
 
 #endif // !RPN_HPP
