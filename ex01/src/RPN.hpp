@@ -32,19 +32,27 @@ private:
 class RPN {
 private:
   RPN();
-  RPN(const RPN &);
-  RPN &operator=(const RPN &);
-  void tokenize();
-  void parseAndEvaluate();
+  void Tokenize();
+  void ParseAndEvaluate();
 
   std::string line_;
   std::vector<Token> tokens_;
   std::stack<long> rpn_stack_;
+  long min_;
+  long max_;
+  static const long kDefaultMin_ = 0;
+  static const long kDefaultMax_ = 9;
 
 public:
   RPN(const std::string &);
+  RPN(const RPN &);
   ~RPN();
-  long calculate();
+  RPN &operator=(const RPN &);
+  long Calculate();
+  long getMin() const;
+  void setMin();
+  long getMax() const;
+  void setMax();
 };
 
 #endif // !RPN_HPP
