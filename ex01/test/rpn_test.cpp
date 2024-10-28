@@ -10,8 +10,8 @@
 namespace test {
 RPN Setup(const std::string &line, long min, long max) {
   RPN rpn(line);
-  rpn.setMin(min);
-  rpn.setMax(max);
+  rpn.SetMin(min);
+  rpn.SetMax(max);
   return rpn;
 }
 
@@ -19,7 +19,7 @@ RPN Setup(const std::string &line, long min, long max) {
 
 TEST(rpn_test, simple_exp1) {
   RPN rpn("1 9 + 5  - 2  / 3 *");
-  EXPECT_EQ(rpn.Caluculate(), 6);
+  EXPECT_EQ(rpn.Calculate(), 6);
 }
 
 TEST(rpn_test, simple_exp2) {

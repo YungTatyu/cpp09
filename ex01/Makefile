@@ -8,8 +8,8 @@ SRCS_DIR			= src
 OBJS_DIR			= obj
 DEPS_DIR			= dep
 ROOT_DIR			= $(shell pwd)
-BUILD_DIR			= build
 TEST_DIR			= test
+BUILD_DIR			= $(TEST_DIR)/build
 
 SRC_EXT = cpp
 VPATH = $(SRCS_DIR)
@@ -51,7 +51,7 @@ TEST_FILTER ?= '*'
 test:
 	cmake -S . -B $(BUILD_DIR)
 	cmake --build $(BUILD_DIR)
-	$(BUILD_DIR)/webserv-googletest --gtest_filter=$(TEST_FILTER)
+	$(BUILD_DIR)/gtest-googletest --gtest_filter=$(TEST_FILTER)
 
 debug: CXXFLAGS += -fsanitize=address -g 
 debug: all
