@@ -86,20 +86,27 @@ TEST(rpn_test, exp13) {
 }
 
 TEST(rpn_test, exp14) {
+  RPN rpn = test::Setup("1 10 100 1000 10000 1 / * + -+",
+                        std::numeric_limits<long>::min(),
+                        std::numeric_limits<long>::max());
+  EXPECT_EQ(rpn.Calculate(), -10000089);
+}
+
+TEST(rpn_test, lerge_exp1) {
   RPN rpn =
       test::Setup("-9223372036854775808 1 *", std::numeric_limits<long>::min(),
                   std::numeric_limits<long>::max());
   EXPECT_EQ(rpn.Calculate(), -9223372036854775808L);
 }
 
-TEST(rpn_test, exp15) {
+TEST(rpn_test, lerge_exp2) {
   RPN rpn =
       test::Setup("-9223372036854775808 0 +", std::numeric_limits<long>::min(),
                   std::numeric_limits<long>::max());
   EXPECT_EQ(rpn.Calculate(), -9223372036854775808L);
 }
 
-TEST(rpn_test, exp16) {
+TEST(rpn_test, lerge_exp3) {
   RPN rpn =
       test::Setup("9223372036854775806 1 +", std::numeric_limits<long>::min(),
                   std::numeric_limits<long>::max());
@@ -213,6 +220,13 @@ TEST(rpn_test, error_underflow1) {
 TEST(rpn_test, error_underflow2) {
   RPN rpn =
       test::Setup("-9223372036854775808 10 *", std::numeric_limits<long>::min(),
+                  std::numeric_limits<long>::max());
+  EXPECT_THROW(rpn.Calculate();, std::runtime_error);
+}
+
+TEST(rpn_test, error_underflow3) {
+  RPN rpn =
+      test::Setup("92233720368547758 -1000 *", std::numeric_limits<long>::min(),
                   std::numeric_limits<long>::max());
   EXPECT_THROW(rpn.Calculate();, std::runtime_error);
 }
