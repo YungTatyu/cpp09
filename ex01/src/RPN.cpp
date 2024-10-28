@@ -201,18 +201,19 @@ void RPN::Evaluate(char ope) {
     rpn_stack_.push(lh - rh);
     break;
   case '*': {
-    long result = lh * rh;
     /**
      * check overflow
-     * overflowしたときは、resultが0になるときがある
-     *
-     */
-    if ((!(lh == 0 || rh == 0) && result == 0) ||
-        (lh != 0 && rh != 0 && lh != (result / rh))) {
+     * これじゃうまくいかない: netの記事は信用できない
+     *if ((!(lh == 0 || rh == 0) && result == 0) ||*/
+    /*    (lh != 0 && rh != 0 && lh != (result / rh))) {*/
+    if ((lh > 0 && rh > 0 && lh > longmax / rh) ||
+        (lh > 0 && rh < 0 && rh < longmin / lh) ||
+        (lh < 0 && rh > 0 && lh < longmin / rh) ||
+        (lh < 0 && rh < 0 && lh < longmax / rh)) {
       throw std::runtime_error(
           Error("result of the calculation is out of range"));
     }
-    rpn_stack_.push(result);
+    rpn_stack_.push(lh * rh);
     break;
   }
   case '/':
