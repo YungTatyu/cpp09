@@ -35,7 +35,7 @@ private:
   void Tokenize();
   void ParseAndEvaluate();
   bool IsOperator(char) const;
-  void AddToken(const std::string &, Token::Type);
+  void AddToken(std::string &, Token::Type);
 
   std::string line_;
   std::vector<Token> tokens_;

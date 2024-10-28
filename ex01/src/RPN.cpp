@@ -34,11 +34,12 @@ bool RPN::IsOperator(char ch) const {
   return ch == '+' || ch == '-' || ch == '*' || ch == '/';
 }
 
-void RPN::AddToken(const std::string &token, Token::Type type) {
+void RPN::AddToken(std::string &token, Token::Type type) {
   if (token.empty()) {
     return;
   }
   tokens_.push_back(Token(token, type));
+  token.clear();
 }
 
 void RPN::Tokenize() {
