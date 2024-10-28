@@ -6,6 +6,11 @@
 #include <limits>
 #include <sstream>
 
+RPN::RPN() {
+  min_ = kDefaultMin_;
+  max_ = kDefaultMax_;
+}
+
 RPN::RPN(const std::string &line) {
   line_ = line;
   min_ = kDefaultMin_;
@@ -204,7 +209,9 @@ void RPN::Evaluate(char ope) {
 }
 
 void RPN::ParseAndEvaluate() {
-
+  if (tokens_.size() == 0) {
+    throw std::runtime_error(Error("stack empty"));
+  }
   for (std::vector<Token>::iterator it = tokens_.begin(); it != tokens_.end();
        ++it) {
     switch (it->type_) {

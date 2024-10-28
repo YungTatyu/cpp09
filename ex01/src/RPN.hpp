@@ -31,7 +31,6 @@ private:
 
 class RPN {
 private:
-  RPN();
   void Tokenize();
   void ParseAndEvaluate();
   void Evaluate(char);
@@ -49,6 +48,7 @@ private:
   static const long kDefaultMax_ = 9;
 
 public:
+  RPN();
   RPN(const std::string &);
   RPN(const RPN &);
   ~RPN();
