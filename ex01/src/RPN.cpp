@@ -179,22 +179,22 @@ void RPN::Evaluate(char ope) {
   rpn_stack_.pop();
   long lh = rpn_stack_.top();
   rpn_stack_.pop();
-  long max = std::numeric_limits<long>::max();
-  long min = std::numeric_limits<long>::min();
+  long longmax = std::numeric_limits<long>::max();
+  long longmin = std::numeric_limits<long>::min();
 
   switch (ope) {
   case '+':
     // check overflow
-    if ((lh > 0 && rh > 0 && lh > max - rh) ||
-        (lh < 0 && rh < 0 && lh < min - rh)) {
+    if ((lh > 0 && rh > 0 && lh > longmax - rh) ||
+        (lh < 0 && rh < 0 && lh < longmin - rh)) {
       throw std::runtime_error(
           Error("result of the calculation is out of range"));
     }
     rpn_stack_.push(lh + rh);
     break;
   case '-':
-    if ((lh > 0 && rh < 0 && lh > max + rh) ||
-        (lh < 0 && rh > 0 && lh < min + rh)) {
+    if ((lh > 0 && rh < 0 && lh > longmax + rh) ||
+        (lh < 0 && rh > 0 && lh < longmin + rh)) {
       throw std::runtime_error(
           Error("result of the calculation is out of range"));
     }
@@ -202,14 +202,13 @@ void RPN::Evaluate(char ope) {
     break;
   case '*': {
     long result = lh * rh;
-    std::cerr << "result/ " << result << "\n";
     /**
      * check overflow
      * overflowしたときは、resultが0になるときがある
      *
      */
-    if ((lh != 0 && rh != 0 && result == 0) ||
-        (lh != 0 && rh != 0 && lh != (rh / result))) {
+    if ((!(lh == 0 || rh == 0) && result == 0) ||
+        (lh != 0 && rh != 0 && lh != (result / rh))) {
       throw std::runtime_error(
           Error("result of the calculation is out of range"));
     }
@@ -220,7 +219,7 @@ void RPN::Evaluate(char ope) {
     if (rh == 0) {
       throw std::runtime_error(Error("divide by zero"));
     }
-    if (lh == min && rh == -1) {
+    if (lh == longmin && rh == -1) {
       throw std::runtime_error(
           Error("result of the calculation is out of range"));
     }
