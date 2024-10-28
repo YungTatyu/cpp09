@@ -67,7 +67,6 @@ void RPN::Tokenize() {
 
     switch (state) {
     case sw_start:
-      /*std::cerr << "sw_start" << "\n";*/
       if (std::isspace(static_cast<int>(ch))) {
         state = sw_space;
       } else if (std::isdigit(ch)) {
@@ -85,7 +84,6 @@ void RPN::Tokenize() {
       }
       break;
     case sw_space:
-      /*std::cerr << "sw_space" << "\n";*/
       if (!std::isspace(static_cast<int>(ch))) {
         state = sw_start;
         break;
@@ -93,7 +91,6 @@ void RPN::Tokenize() {
       ++i;
       break;
     case sw_num:
-      /*std::cerr << "sw_num" << "\n";*/
       if (!std::isdigit(ch)) {
         AddToken(cur_val, Token::KNum);
         state = sw_start;
@@ -103,7 +100,6 @@ void RPN::Tokenize() {
       ++i;
       break;
     case sw_sign:
-      /*std::cerr << "sw_sign" << "\n";*/
       if (std::isdigit(ch)) {
         state = sw_num;
         cur_val += ch;
@@ -114,14 +110,11 @@ void RPN::Tokenize() {
       --i; // operatorのindexに戻る
       break;
     case sw_operator:
-      /*std::cerr << "sw_ope: cur_val: ";*/
-      /*std::cerr << cur_val << "\n";*/
       AddToken(cur_val, Token::KOperator);
       ++i;
       state = sw_start;
       break;
     case sw_str:
-      /*std::cerr << "sw_str" << "\n";*/
       if (std::isspace(static_cast<int>(ch)) || IsOperator(ch)) {
         AddToken(cur_val, Token::KOther);
         state = sw_start;
@@ -132,11 +125,9 @@ void RPN::Tokenize() {
       break;
     }
   }
-  /*std::cerr << "cur val: " << cur_val << "\n";*/
   if (!cur_val.empty()) {
     switch (state) {
     case sw_sign:
-      /*std::cerr << "ope token" << "\n";*/
       AddToken(cur_val, Token::KOperator);
       break;
     case sw_num:
@@ -146,15 +137,9 @@ void RPN::Tokenize() {
       AddToken(cur_val, Token::KOther);
       break;
     default:
-      /*std::cerr << "def" << "\n";*/
       break;
     }
   }
-  /*for (std::vector<Token>::iterator it = tokens_.begin(); it !=
-   * tokens_.end();*/
-  /*     ++it) {*/
-  /*  std::cerr << "token=" << it->token_ << "\n";*/
-  /*}*/
 }
 
 std::string RPN::Error(const std::string &msg) {
@@ -253,10 +238,6 @@ void RPN::ParseAndEvaluate() {
     }
   }
   if (rpn_stack_.size() != 1) {
-    /*while (!rpn_stack_.empty()) {*/
-    /*  std::cout << rpn_stack_.top() << "\n";*/
-    /*  rpn_stack_.pop();*/
-    /*}*/
     throw std::runtime_error(Error("stack has multiple results"));
   }
 }
