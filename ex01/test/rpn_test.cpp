@@ -28,8 +28,8 @@ TEST(rpn_test, simple_exp2) {
 }
 
 TEST(rpn_test, simple_exp3) {
-  RPN rpn("10   2 /   ");
-  EXPECT_EQ(rpn.Calculate(), 5);
+  RPN rpn("9   2 /   ");
+  EXPECT_EQ(rpn.Calculate(), 4);
 }
 
 TEST(rpn_test, simple_exp4) {
@@ -43,8 +43,8 @@ TEST(rpn_test, simple_exp5) {
 }
 
 TEST(rpn_test, simple_exp6) {
-  RPN rpn("    12 4 / 2 * ");
-  EXPECT_EQ(rpn.Calculate(), 6);
+  RPN rpn("    1 4 / 2 * ");
+  EXPECT_EQ(rpn.Calculate(), 0);
 }
 
 TEST(rpn_test, simple_exp7) {
@@ -58,13 +58,23 @@ TEST(rpn_test, simple_exp8) {
 }
 
 TEST(rpn_test, simple_exp9) {
-  RPN rpn("10 2 - 4  *  ");
-  EXPECT_EQ(rpn.Calculate(), 32);
+  RPN rpn("9 2 - 4  *  ");
+  EXPECT_EQ(rpn.Calculate(), 28);
 }
 
 TEST(rpn_test, simple_exp10) {
   RPN rpn("5 1 2 +  4 *  + 3 -");
   EXPECT_EQ(rpn.Calculate(), 14);
+}
+
+TEST(rpn_test, only_nomber1) {
+  RPN rpn("     4      ");
+  EXPECT_EQ(rpn.Calculate(), 4);
+}
+
+TEST(rpn_test, only_nomber2) {
+  RPN rpn("0");
+  EXPECT_EQ(rpn.Calculate(), 0);
 }
 
 TEST(rpn_test, error_no_operator1) {
@@ -73,7 +83,7 @@ TEST(rpn_test, error_no_operator1) {
 }
 
 TEST(rpn_test, error_no_operator2) {
-  RPN rpn(" 1 ");
+  RPN rpn(" 1    4     10 ");
   EXPECT_THROW(rpn.Calculate();, std::runtime_error);
 }
 
