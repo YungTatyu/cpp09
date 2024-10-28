@@ -34,8 +34,11 @@ private:
   RPN();
   void Tokenize();
   void ParseAndEvaluate();
+  void Evaluate(char);
+  void ParseNum(const std::string &);
   bool IsOperator(char) const;
   void AddToken(std::string &, Token::Type);
+  std::string Error(const std::string & = "");
 
   std::string line_;
   std::vector<Token> tokens_;
@@ -50,7 +53,8 @@ public:
   RPN(const RPN &);
   ~RPN();
   RPN &operator=(const RPN &);
-  long Calculate();
+  long Calculate(const std::string & = "");
+  void Clear();
   long GetMin() const;
   void SetMin(long);
   long GetMax() const;

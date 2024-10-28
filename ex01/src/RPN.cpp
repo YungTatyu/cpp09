@@ -1,7 +1,10 @@
 #include "RPN.hpp"
-#include <algorithm>
 #include <cctype>
 #include <cstddef>
+#include <cstdio>
+#include <iostream>
+#include <limits>
+#include <sstream>
 
 RPN::RPN(const std::string &line) {
   line_ = line;
@@ -66,7 +69,7 @@ void RPN::Tokenize() {
       } else if (ch == '+' || ch == '-') {
         state = sw_sign;
         cur_val += ch;
-        i++;
+        ++i;
         break;
       } else if (IsOperator(ch)) {
         state = sw_operator;
@@ -98,6 +101,8 @@ void RPN::Tokenize() {
         break;
       }
       state = sw_operator;
+      --i; // operatorのindexに戻る
+      cur_val.clear();
       break;
     case sw_operator:
       AddToken(cur_val, Token::KOperator);
@@ -129,4 +134,114 @@ void RPN::Tokenize() {
       break;
     }
   }
+}
+
+std::string RPN::Error(const std::string &msg) {
+  return msg.empty() ? "error" : "error: " + msg;
+}
+
+void RPN::ParseNum(const std::string &str) {
+  std::istringstream iss(str);
+  long result;
+  iss >> result;
+  if (iss.fail() || iss.peek() != EOF) {
+    throw std::runtime_error(Error());
+  }
+  if (result > max_ || result < min_) {
+    throw std::runtime_error(Error("value out of range"));
+  }
+  rpn_stack_.push(result);
+}
+
+void RPN::Evaluate(char ope) {
+  long rh = rpn_stack_.top();
+  rpn_stack_.pop();
+  long lh = rpn_stack_.top();
+  rpn_stack_.pop();
+  long max = std::numeric_limits<long>::max();
+  long min = std::numeric_limits<long>::min();
+
+  switch (ope) {
+  case '+':
+    // check overflow
+    if ((lh > 0 && rh > 0 && lh > max - rh) ||
+        (lh < 0 && rh < 0 && lh < min - rh)) {
+      throw std::runtime_error(
+          Error("result of the calculation is out of range"));
+    }
+    rpn_stack_.push(lh + rh);
+    break;
+  case '-':
+    if ((lh > 0 && rh < 0 && lh > max + rh) ||
+        (lh < 0 && rh > 0 && lh < min + rh)) {
+      throw std::runtime_error(
+          Error("result of the calculation is out of range"));
+    }
+    rpn_stack_.push(lh - rh);
+    break;
+  case '*': {
+    long result = lh * rh;
+    if (lh != 0 && rh != 0 && lh != (rh / result)) {
+      throw std::runtime_error(
+          Error("result of the calculation is out of range"));
+    }
+    rpn_stack_.push(result);
+    break;
+  }
+  case '/':
+    if (rh == 0) {
+      throw std::runtime_error(Error("divide by zero"));
+    }
+    if (lh == min && rh == -1) {
+      throw std::runtime_error(
+          Error("result of the calculation is out of range"));
+    }
+    rpn_stack_.push(lh / rh);
+    break;
+  default:
+    break;
+  }
+}
+
+void RPN::ParseAndEvaluate() {
+
+  for (std::vector<Token>::iterator it = tokens_.begin(); it != tokens_.end();
+       ++it) {
+    switch (it->type_) {
+    case Token::KNum:
+      ParseNum(it->token_);
+      break;
+    case Token::KOperator:
+      if (rpn_stack_.size() <= 1) {
+        throw std::runtime_error(Error("stack empty"));
+      }
+      Evaluate(it->token_[0]);
+      break;
+    case Token::KOther:
+      throw std::runtime_error(Error("unexpected token: `") + it->token_ + "'");
+      break;
+    }
+  }
+  if (rpn_stack_.size() != 1) {
+    throw std::runtime_error(Error("stack has multiple results"));
+  }
+}
+
+long RPN::Calculate(const std::string &line) {
+  // 既に計算済み
+  if (rpn_stack_.size() != 0) {
+    return rpn_stack_.top();
+  }
+  if (!line.empty()) {
+    line_ = line;
+  }
+  Tokenize();
+  ParseAndEvaluate();
+  return rpn_stack_.top();
+}
+
+void RPN::Clear() {
+  line_.clear();
+  tokens_.clear();
+  rpn_stack_ = std::stack<long>();
 }
