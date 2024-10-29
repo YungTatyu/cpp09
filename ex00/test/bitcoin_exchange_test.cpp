@@ -102,6 +102,21 @@ TEST(bitcoin_exchange_test, error_invalid_price4) {
   EXPECT_FALSE(be.ProcessLineForCalculation(" 2010-1-1 | --1   "));
 }
 
+TEST(bitcoin_exchange_test, error_invalid_price5) {
+  BitcoinExchange be("db/data.csv");
+  EXPECT_FALSE(be.ProcessLineForCalculation(" 2010-1-1 | 1test   "));
+}
+
+TEST(bitcoin_exchange_test, error_invalid_price6) {
+  BitcoinExchange be("db/data.csv");
+  EXPECT_FALSE(be.ProcessLineForCalculation(" 2010-1-1 | 1.0t"));
+}
+
+TEST(bitcoin_exchange_test, error_invalid_price7) {
+  BitcoinExchange be("db/data.csv");
+  EXPECT_FALSE(be.ProcessLineForCalculation(" 2010-1-1 | 1000."));
+}
+
 TEST(bitcoin_exchange_test, error_invalid_input1) {
   BitcoinExchange be("db/data.csv");
   EXPECT_FALSE(be.ProcessLineForCalculation(" test   "));
