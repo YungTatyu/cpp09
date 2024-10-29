@@ -141,3 +141,48 @@ TEST(bitcoin_exchange_test, error_invalid_csv3) {
   BitcoinExchange be("db/duplicate_data.csv");
   EXPECT_FALSE(be.ProcessLineForCalculation(" 2010-1-1 | 42   "));
 }
+
+TEST(bitcoin_exchange_test, error_invalid_csv4) {
+  BitcoinExchange be("db/invalid_date1.csv");
+  EXPECT_FALSE(be.ProcessLineForCalculation(" 2010-1-1 | 42   "));
+}
+
+TEST(bitcoin_exchange_test, error_invalid_csv5) {
+  BitcoinExchange be("db/invalid_date2.csv");
+  EXPECT_FALSE(be.ProcessLineForCalculation(" 2010-1-1 | 42   "));
+}
+
+TEST(bitcoin_exchange_test, error_invalid_csv6) {
+  BitcoinExchange be("db/invalid_date3.csv");
+  EXPECT_FALSE(be.ProcessLineForCalculation(" 2010-1-1 | 42   "));
+}
+
+TEST(bitcoin_exchange_test, error_invalid_csv7) {
+  BitcoinExchange be("db/invalid_date4.csv");
+  EXPECT_FALSE(be.ProcessLineForCalculation(" 2010-1-1 | 42   "));
+}
+
+TEST(bitcoin_exchange_test, error_invalid_csv8) {
+  BitcoinExchange be("db/invalid_date5.csv");
+  EXPECT_FALSE(be.ProcessLineForCalculation(" 2010-1-1 | 42   "));
+}
+
+TEST(bitcoin_exchange_test, error_invalid_csv9) {
+  BitcoinExchange be("db/invalid_rate1.csv");
+  EXPECT_FALSE(be.ProcessLineForCalculation(" 2010-1-1 | 42   "));
+}
+
+TEST(bitcoin_exchange_test, error_invalid_csv10) {
+  BitcoinExchange be("db/invalid_rate2.csv");
+  EXPECT_FALSE(be.ProcessLineForCalculation(" 2010-1-1 | 42   "));
+}
+
+TEST(bitcoin_exchange_test, error_invalid_csv11) {
+  BitcoinExchange be("db/invalid_rate3.csv");
+  EXPECT_FALSE(be.ProcessLineForCalculation(" 2010-1-1 | 42   "));
+}
+
+TEST(bitcoin_exchange_test, error_invalid_csv12) {
+  BitcoinExchange be("db/invalid_rate4.csv");
+  EXPECT_FALSE(be.ProcessLineForCalculation(" 2010-1-1 | 42   "));
+}
