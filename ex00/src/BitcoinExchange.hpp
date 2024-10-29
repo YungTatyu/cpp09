@@ -54,9 +54,9 @@ public:
   bool ProcessLineForCalculation(const std::string &);
 
   std::string rate_data_file_;
-  std::list<std::string> price_list_;
   std::list<std::string> rate_list_;
   std::map<Date, double> rate_map_;
+  std::list<std::string> price_list_;
 
 private:
   BitcoinExchange(const BitcoinExchange &);

@@ -28,6 +28,9 @@ bool BitcoinExchange::ProcessFileForCalculation(const std::string &file) {
     PrintError("could not open a file: " + file);
     return false;
   }
+  if (!ParseRateData()) {
+    return false;
+  }
   bool suc = true;
   return suc;
 }
@@ -83,8 +86,7 @@ Date BitcoinExchange::ParseDate(const std::string &date) const {
   int year = Convert<int>(list.front());
   list.pop_front();
   int month = Convert<int>(list.front());
-  list.pop_front();
-  int day = Convert<int>(list.front());
+  int day = Convert<int>(list.back());
   return Date(year, month, day);
 }
 
@@ -139,7 +141,27 @@ bool BitcoinExchange::ParseRateData() {
       return false;
     }
   }
+  if (rate_map_.size() == 0) {
+    PrintError("there is no data");
+    return false;
+  }
   return true;
+}
+
+/**
+ * rateが見つからない場合は、過去直近のdataを参照する
+ */
+double BitcoinExchange::FindClosetRate(const Date &date) const {
+  std::map<Date, double>::const_iterator it = rate_map_.find(date);
+  if (it != rate_map_.end()) {
+    return it->second;
+  }
+  it = rate_map_.lower_bound(date);
+  if (it == rate_map_.begin()) {
+    throw std::runtime_error("there is no available past rate");
+  }
+  --it;
+  return it->second;
 }
 
 bool BitcoinExchange::ProcessLineForCalculation(const std::string &line) {
