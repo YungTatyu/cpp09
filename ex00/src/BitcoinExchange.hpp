@@ -66,8 +66,8 @@ private:
   Date ParseDate(const std::string &) const;
   double ParsePrice(const std::string &) const;
   double FindClosetRate(const Date &) const;
-  double CalcValue(const Date &) const;
   bool ReadFile(const std::string &);
+  bool IsPriceInRange(const std::string &) const;
   std::list<std::string> Split(const std::string &,
                                const std::string & = " \f\n\r\t\v") const;
   void PrintError(const std::string &) const;

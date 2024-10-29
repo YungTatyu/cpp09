@@ -86,6 +86,27 @@ Date BitcoinExchange::ParseDate(const std::string &date) const {
   return Date(year, month, day);
 }
 
+bool BitcoinExchange::IsPriceInRange(const std::string &str) const {
+  std::string::size_type dot_pos = str.find(".");
+  std::string integer_part = str.substr(0, dot_pos);
+  int integer = Convert<int>(integer_part);
+
+  // 整数部が1000かつ小数点がある場合は、1000を越えていないか確認する
+  if (integer == kMaxPrice_ && dot_pos != std::string::npos) {
+    std::string decimal_part = str.substr(dot_pos + 1);
+    return decimal_part.find_first_of("123456789") == std::string::npos;
+  }
+  return integer <= kMaxPrice_ && integer >= kMinPrice_;
+}
+
+double BitcoinExchange::ParsePrice(const std::string &price) const {
+  double d = Convert<double>(price);
+  if (!IsPriceInRange(price)) {
+    throw std::runtime_error("price is out of range");
+  }
+  return d;
+}
+
 bool BitcoinExchange::ProcessLineForCalculation(const std::string &line) {
   std::list<std::string> list = Split(line);
   if (list.size() != 3) {
