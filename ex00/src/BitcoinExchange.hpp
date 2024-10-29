@@ -1,7 +1,11 @@
 #ifndef BITCOIN_EXCHANGE_HPP
 #define BITCOIN_EXCHANGE_HPP
 
+#include <cstdio>
+#include <iomanip>
+#include <list>
 #include <map>
+#include <sstream>
 #include <string>
 #include <utility>
 
@@ -39,32 +43,49 @@ private:
   Date();
 };
 
+std::ostream &operator<<(std::ostream &os, const Date &date);
+
 class BitcoinExchange {
 public:
   BitcoinExchange();
   BitcoinExchange(const std::string &);
-  BitcoinExchange(const BitcoinExchange &);
   ~BitcoinExchange();
-  BitcoinExchange &operator=(const BitcoinExchange &);
   bool ProcessFileForCalculation(const std::string &);
   bool ProcessLineForCalculation(const std::string &);
 
-  std::string raw_rate_data_;
+  std::string rate_data_file_;
+  std::list<std::string> rate_stack_;
   std::string raw_price_data_; // use this when parsing price file
   std::map<Date, double> rate_map_;
 
 private:
+  BitcoinExchange(const BitcoinExchange &);
+  BitcoinExchange &operator=(const BitcoinExchange &);
   bool ParseRateData();
   std::pair<Date, double> ParsePriceLine(const std::string &);
   Date ParseDate(const std::string &) const;
   double ParsePrice(const std::string &) const;
   double FindClosetRate(const Date &) const;
   double CalcValue(const Date &) const;
-  std::string ReadFile(const std::string &) const;
+  bool ReadFile(const std::string &);
+  std::list<std::string> Split(const std::string &,
+                               const std::string & = " \f\n\r\t\v") const;
+  void PrintError(const std::string &) const;
+  template <typename T> T Convert(const std::string &) const;
 
   static const char *kDefaultRateDataFile_;
   static const int kMinPrice_ = 0;
   static const int kMaxPrice_ = 1000;
 };
+
+template <typename T> T BitcoinExchange::Convert(const std::string &str) const {
+  std::istringstream iss(str);
+  T result;
+  iss >> result;
+  if (iss.fail() || iss.peek() != EOF) {
+    throw std::runtime_error("bad input => " + str);
+  }
+  return result;
+}
 
 #endif // !BITCOIN_EXCHANGE_HPP
