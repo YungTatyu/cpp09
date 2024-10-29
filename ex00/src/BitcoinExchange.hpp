@@ -54,8 +54,8 @@ public:
   bool ProcessLineForCalculation(const std::string &);
 
   std::string rate_data_file_;
-  std::list<std::string> rate_stack_;
-  std::string raw_price_data_; // use this when parsing price file
+  std::list<std::string> price_list_;
+  std::list<std::string> rate_list_;
   std::map<Date, double> rate_map_;
 
 private:
@@ -66,7 +66,7 @@ private:
   Date ParseDate(const std::string &) const;
   double ParsePrice(const std::string &) const;
   double FindClosetRate(const Date &) const;
-  bool ReadFile(const std::string &);
+  bool ReadFile(const std::string &, std::list<std::string> &);
   bool IsPriceInRange(const std::string &) const;
   std::list<std::string> Split(const std::string &,
                                const std::string & = " \f\n\r\t\v") const;

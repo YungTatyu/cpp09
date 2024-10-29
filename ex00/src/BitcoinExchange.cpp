@@ -1,6 +1,7 @@
 #include "BitcoinExchange.hpp"
 
 #include <cctype>
+#include <cmath>
 #include <cstdio>
 #include <exception>
 #include <fstream>
@@ -10,6 +11,7 @@
 #include <sstream>
 #include <stdexcept>
 #include <string>
+#include <utility>
 
 const char *BitcoinExchange::kDefaultRateDataFile_ = "db/data.csv";
 
@@ -22,7 +24,7 @@ BitcoinExchange::BitcoinExchange(const std::string &file) {
 BitcoinExchange::~BitcoinExchange() {}
 
 bool BitcoinExchange::ProcessFileForCalculation(const std::string &file) {
-  if (!ReadFile(file.c_str())) {
+  if (!ReadFile(file, price_list_)) {
     PrintError("could not open a file: " + file);
     return false;
   }
@@ -107,7 +109,43 @@ double BitcoinExchange::ParsePrice(const std::string &price) const {
   return d;
 }
 
+bool BitcoinExchange::ParseRateData() {
+  if (ReadFile(rate_data_file_, rate_list_)) {
+    return false;
+  }
+  for (std::list<std::string>::iterator it = rate_list_.begin();
+       it != rate_list_.end(); ++it) {
+    std::list<std::string> list = Split(*it, ",");
+    if (it == rate_list_.begin()) {
+      if (list.size() != 2) {
+        PrintError("invalid colums: " + *it);
+        return false;
+      }
+      if (list.front() != "date" || list.back() != "exchange_rate") {
+        PrintError("invalid colums: " + *it);
+        return false;
+      }
+      continue;
+    }
+    try {
+      Date date = ParseDate(list.front());
+      double rate = Convert<double>(list.back());
+      if (rate < 0.0) {
+        throw std::runtime_error("rate cannot be a negative number");
+      }
+      rate_map_.insert(std::make_pair(date, rate));
+    } catch (const std::exception &e) {
+      PrintError(e.what());
+      return false;
+    }
+  }
+  return true;
+}
+
 bool BitcoinExchange::ProcessLineForCalculation(const std::string &line) {
+  if (rate_map_.empty() && !ParseRateData()) {
+    return false;
+  }
   std::list<std::string> list = Split(line);
   if (list.size() != 3) {
     PrintError("bad input => " + line);
@@ -138,7 +176,8 @@ void BitcoinExchange::PrintError(const std::string &msg) const {
   std::cerr << errmsg << std::endl;
 }
 
-bool BitcoinExchange::ReadFile(const std::string &file) {
+bool BitcoinExchange::ReadFile(const std::string &file,
+                               std::list<std::string> &list) {
   std::ifstream input_file(file.c_str());
   if (input_file.fail()) {
     return false;
@@ -146,7 +185,7 @@ bool BitcoinExchange::ReadFile(const std::string &file) {
 
   std::string line;
   while (std::getline(input_file, line)) {
-    rate_stack_.push_back(line);
+    list.push_back(line);
   }
   input_file.close();
   return true;
