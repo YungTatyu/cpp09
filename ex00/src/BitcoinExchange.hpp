@@ -68,6 +68,7 @@ private:
   double FindClosetRate(const Date &) const;
   bool ReadFile(const std::string &, std::list<std::string> &);
   bool IsPriceInRange(const std::string &) const;
+  bool IsValidDate(int year, int month, int date) const;
   std::list<std::string> Split(const std::string &,
                                const std::string & = " \f\n\r\t\v") const;
   void PrintError(const std::string &) const;

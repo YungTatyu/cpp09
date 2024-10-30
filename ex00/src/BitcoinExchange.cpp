@@ -94,6 +94,22 @@ BitcoinExchange::Split(const std::string &line,
   return list;
 }
 
+bool BitcoinExchange::IsValidDate(int year, int month, int date) const {
+  if (year < 0 || (month < 1 || month > 12) || date > 31) {
+    return false;
+  }
+  if (month == 2) {
+    // うるう年
+    if ((year % 4 == 0 && year % 100 != 0) || (year % 400 == 0))
+      return date <= 29;
+    return date <= 28;
+  }
+  if (month == 4 || month == 6 || month == 9 || month == 11) {
+    return date <= 30;
+  }
+  return true;
+}
+
 Date BitcoinExchange::ParseDate(const std::string &date) const {
   std::list<std::string> list = Split(date, "-");
   std::string err = "bad input => " + date;
@@ -105,6 +121,9 @@ Date BitcoinExchange::ParseDate(const std::string &date) const {
   list.pop_front();
   int month = Convert<int>(list.front());
   int day = Convert<int>(list.back());
+  if (!IsValidDate(year, month, day)) {
+    throw std::runtime_error(err);
+  }
   return Date(year, month, day);
 }
 
