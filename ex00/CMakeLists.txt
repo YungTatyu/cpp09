@@ -16,9 +16,9 @@ FetchContent_MakeAvailable(googletest)
 
 add_executable(${PROJECT_NAME}-googletest 
 	# src files
-  src/RPN.cpp
+  src/BitcoinExchange.cpp
 	# test files
-  test/rpn_test.cpp
+  test/bitcoin_exchange_test.cpp
 )
 target_link_libraries(${PROJECT_NAME}-googletest gtest_main)
 # debug
