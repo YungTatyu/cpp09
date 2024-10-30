@@ -25,13 +25,31 @@ BitcoinExchange::~BitcoinExchange() {}
 
 bool BitcoinExchange::ProcessFileForCalculation(const std::string &file) {
   if (!ReadFile(file, price_list_)) {
-    PrintError("could not open a file: " + file);
     return false;
   }
   if (!ParseRateData()) {
     return false;
   }
   bool suc = true;
+  for (std::list<std::string>::iterator it = price_list_.begin();
+       it != price_list_.end(); ++it) {
+    if (it == price_list_.begin()) {
+      std::list<std::string> list = Split(*it);
+      if (list.size() != 3) {
+        PrintError("invalid column name: " + *it);
+        return false;
+      }
+      std::string date = list.front();
+      list.pop_front();
+      if (date != "date" || list.front() != "|" || list.back() != "value") {
+        PrintError("invalid column name: " + *it);
+        return false;
+      }
+      continue;
+    }
+    bool re = ProcessLineForCalculation(*it);
+    suc = (!suc || !re) ? false : true;
+  }
   return suc;
 }
 
@@ -106,13 +124,13 @@ bool BitcoinExchange::IsPriceInRange(const std::string &str) const {
 double BitcoinExchange::ParsePrice(const std::string &price) const {
   double d = Convert<double>(price);
   if (!IsPriceInRange(price)) {
-    throw std::runtime_error("price is out of range");
+    throw std::runtime_error("price is out of range => " + price);
   }
   return d;
 }
 
 bool BitcoinExchange::ParseRateData() {
-  if (ReadFile(rate_data_file_, rate_list_)) {
+  if (!ReadFile(rate_data_file_, rate_list_)) {
     return false;
   }
   for (std::list<std::string>::iterator it = rate_list_.begin();
@@ -120,7 +138,7 @@ bool BitcoinExchange::ParseRateData() {
     std::list<std::string> list = Split(*it, ",");
     if (it == rate_list_.begin()) {
       if (list.size() != 2) {
-        PrintError("invalid colums: " + *it);
+        PrintError("invalid column name: " + *it);
         return false;
       }
       if (list.front() != "date" || list.back() != "exchange_rate") {
@@ -133,7 +151,8 @@ bool BitcoinExchange::ParseRateData() {
       Date date = ParseDate(list.front());
       double rate = Convert<double>(list.back());
       if (rate < 0.0) {
-        throw std::runtime_error("rate cannot be a negative number");
+        throw std::runtime_error("rate cannot be a negative number => " +
+                                 list.back());
       }
       rate_map_.insert(std::make_pair(date, rate));
     } catch (const std::exception &e) {
@@ -181,8 +200,7 @@ bool BitcoinExchange::ProcessLineForCalculation(const std::string &line) {
       PrintError("unexpected input => " + pipe);
       return false;
     }
-    list.pop_front();
-    double price = ParsePrice(list.front());
+    double price = ParsePrice(list.back());
     double rate = FindClosetRate(date);
     double value = price * rate;
     std::cout << date << " => " << price << " = " << value << std::endl;
@@ -202,6 +220,7 @@ bool BitcoinExchange::ReadFile(const std::string &file,
                                std::list<std::string> &list) {
   std::ifstream input_file(file.c_str());
   if (input_file.fail()) {
+    PrintError("could not open a file: " + file);
     return false;
   }
 
