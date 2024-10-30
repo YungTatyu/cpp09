@@ -173,6 +173,10 @@ bool BitcoinExchange::ParseRateData() {
         throw std::runtime_error("rate cannot be a negative number => " +
                                  list.back());
       }
+      if (rate_map_.find(date) != rate_map_.end()) {
+        throw std::runtime_error("date cannot be duplicated => " +
+                                 list.front());
+      }
       rate_map_.insert(std::make_pair(date, rate));
     } catch (const std::exception &e) {
       PrintError(e.what());

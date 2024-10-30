@@ -82,7 +82,7 @@ private:
 template <typename T> T BitcoinExchange::Convert(const std::string &str) const {
   std::istringstream iss(str);
   T result;
-  iss >> result;
+  iss >> std::noskipws >> result;
   if (iss.fail() || iss.peek() != EOF) {
     throw std::runtime_error("bad input => " + str);
   }
