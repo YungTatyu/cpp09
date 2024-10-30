@@ -36,13 +36,13 @@ bool BitcoinExchange::ProcessFileForCalculation(const std::string &file) {
     if (it == price_list_.begin()) {
       std::list<std::string> list = Split(*it);
       if (list.size() != 3) {
-        PrintError("invalid column name: " + *it);
+        PrintError("invalid column name: `" + *it + "'");
         return false;
       }
       std::string date = list.front();
       list.pop_front();
       if (date != "date" || list.front() != "|" || list.back() != "value") {
-        PrintError("invalid column name: " + *it);
+        PrintError("invalid column name: `" + *it + "'");
         return false;
       }
       continue;
@@ -157,11 +157,11 @@ bool BitcoinExchange::ParseRateData() {
     std::list<std::string> list = Split(*it, ",");
     if (it == rate_list_.begin()) {
       if (list.size() != 2) {
-        PrintError("invalid column name: " + *it);
+        PrintError("invalid column name: `" + *it + "'");
         return false;
       }
       if (list.front() != "date" || list.back() != "exchange_rate") {
-        PrintError("invalid colums: " + *it);
+        PrintError("invalid column name: `" + *it + "'");
         return false;
       }
       continue;
@@ -212,7 +212,7 @@ bool BitcoinExchange::ProcessLineForCalculation(const std::string &line) {
   }
   std::list<std::string> list = Split(line);
   if (list.size() != 3) {
-    PrintError("bad input => " + line);
+    PrintError("bad input => `" + line + "'");
     return false;
   }
   try {
@@ -220,7 +220,7 @@ bool BitcoinExchange::ProcessLineForCalculation(const std::string &line) {
     list.pop_front();
     std::string pipe = list.front();
     if (pipe != "|") {
-      PrintError("unexpected input => " + pipe);
+      PrintError("unexpected input => `" + pipe + "'");
       return false;
     }
     double price = ParsePrice(list.back());
@@ -243,7 +243,7 @@ bool BitcoinExchange::ReadFile(const std::string &file,
                                std::list<std::string> &list) {
   std::ifstream input_file(file.c_str());
   if (input_file.fail()) {
-    PrintError("could not open a file: " + file);
+    PrintError("could not open a file: `" + file + "'");
     return false;
   }
 
