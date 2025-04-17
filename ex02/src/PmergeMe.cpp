@@ -19,6 +19,6 @@ void PmergeMe::ParseNums(const std::list<std::string> &nums) {
     if (ss.fail() || !ss.eof()) {
       throw std::runtime_error(std::string("error: invalid input ") + *it);
     }
-    this->list.push_back(n);
+    list_.push_back(n);
   }
 }

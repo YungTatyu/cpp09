@@ -19,7 +19,7 @@ private:
   PmergeMe(const PmergeMe &);
   PmergeMe &operator=(const PmergeMe &);
   void ParseNums(const std::list<std::string> &nums);
-  std::list<int> list;
+  std::list<int> list_;
 };
 
 #endif // !PMERGE_ME_HPP
