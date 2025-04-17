@@ -220,7 +220,7 @@ void RPN::ParseAndEvaluate() {
   if (tokens_.size() == 0) {
     throw std::runtime_error(Error("stack empty"));
   }
-  for (std::vector<Token>::iterator it = tokens_.begin(); it != tokens_.end();
+  for (std::list<Token>::iterator it = tokens_.begin(); it != tokens_.end();
        ++it) {
     switch (it->type_) {
     case Token::KNum:

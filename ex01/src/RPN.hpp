@@ -1,9 +1,9 @@
 #ifndef RPN_HPP
 #define RPN_HPP
 
+#include <list>
 #include <stack>
 #include <string>
-#include <vector>
 
 struct Token {
   enum Type { KNum, KOperator, KOther };
@@ -40,7 +40,7 @@ private:
   std::string Error(const std::string & = "");
 
   std::string line_;
-  std::vector<Token> tokens_;
+  std::list<Token> tokens_;
   std::stack<long> rpn_stack_;
   long min_;
   long max_;
