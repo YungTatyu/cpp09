@@ -3,11 +3,12 @@
 
 #include <deque>
 #include <list>
+#include <string>
 #include <vector>
 
 class PmergeMe {
 public:
-  PmergeMe(const char **nums);
+  PmergeMe(const std::list<std::string> &nums);
   ~PmergeMe();
   void SortAndPrint();
   std::vector<int> MergeInsertionSort(const std::vector<int> &v);
@@ -17,7 +18,7 @@ private:
   PmergeMe();
   PmergeMe(const PmergeMe &);
   PmergeMe &operator=(const PmergeMe &);
-  void ParseNums(const char **nums);
+  void ParseNums(const std::list<std::string> &nums);
   std::list<int> list;
 };
 
