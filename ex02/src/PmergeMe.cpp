@@ -54,15 +54,19 @@ void PmergeMe::RecurMergeInsertionSort(std::vector<PmergeNode> &v) {
       paired.push_back(v[i + 1]);
     }
   }
+  /*for (std::vector<PmergeNode>::const_iterator it = paired.begin();*/
+  /*     it != paired.end(); ++it) {*/
+  /*  std::cout << it->bignum_ << " ";*/
+  /*}*/
+  /*std::cout << "\n";*/
+  RecurMergeInsertionSort(paired);
+  v_sorted_.insert(paired.begin(), paired.front());
   std::vector<PmergeNode> pend;
+  for (std::vector<PmergeNode>::const_iterator it = paired.begin() + 1;
+       it != paired.end(); ++it) {
+    pend.push_back(*it);
+  }
   if (v.size() % 2 != 0) {
     pend.push_back(v[v.size() - 1]);
   }
-  for (std::vector<PmergeNode>::const_iterator it = paired.begin();
-       it != paired.end(); ++it) {
-    std::cout << it->bignum_ << " ";
-  }
-  std::cout << "\n";
-  RecurMergeInsertionSort(paired);
-  /*v_sorted_.insert(v.begin(), v.front());*/
 }
