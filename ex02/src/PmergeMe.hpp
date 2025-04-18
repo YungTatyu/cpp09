@@ -1,6 +1,7 @@
 #ifndef PMERGE_ME_HPP
 #define PMERGE_ME_HPP
 
+#include <cstddef>
 #include <deque>
 #include <list>
 #include <stack>
@@ -19,9 +20,21 @@ public:
     return *this;
   }
   ~PmergeNode() {}
-  bool operator>(const PmergeNode &other) { return bignum_ > other.bignum_; }
-  bool operator<(const PmergeNode &other) { return bignum_ < other.bignum_; }
-  void push(const PmergeNode *node) { pairs_.push(node); }
+  bool operator>(const PmergeNode &other) const {
+    return bignum_ > other.bignum_;
+  }
+  bool operator<(const PmergeNode &other) const {
+    return bignum_ < other.bignum_;
+  }
+  void push(const PmergeNode *node) {
+    pairs_.push(node);
+    pairs_.pop();
+  }
+  const PmergeNode *pop() {
+    const PmergeNode *re = pairs_.top();
+    pairs_.pop();
+    return re;
+  }
 
   int bignum_;
   std::stack<const PmergeNode *> pairs_;
@@ -45,6 +58,7 @@ private:
   PmergeMe &operator=(const PmergeMe &);
   void ParseNums(const std::list<std::string> &nums);
   void RecurMergeInsertionSort(std::vector<PmergeNode> &v);
+  void BinarySearchInsertion(size_t start, size_t end, const PmergeNode *key);
 
   std::list<int> list_;
   std::vector<PmergeNode> v_sorted_;
