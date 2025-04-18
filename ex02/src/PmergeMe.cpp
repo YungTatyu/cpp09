@@ -8,6 +8,10 @@
 #include <string>
 #include <vector>
 
+const int PmergeMe::jacob_stahal_seq[] = {
+    2, 2, 6, 10, 22, 42, 86, 170, 342, 682, 1366, 2730, 5462,
+};
+
 PmergeMe::PmergeMe(const std::list<std::string> &nums) {
   this->ParseNums(nums);
 }

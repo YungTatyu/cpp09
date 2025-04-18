@@ -37,6 +37,7 @@ public:
   void SortAndPrint();
   std::vector<int> MergeInsertionSortV();
   std::deque<int> MergeInsertionSortQ();
+  static const int jacob_stahal_seq[];
 
 private:
   PmergeMe();
