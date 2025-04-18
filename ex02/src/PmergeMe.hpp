@@ -36,8 +36,8 @@ public:
   PmergeMe(const std::list<std::string> &nums);
   ~PmergeMe();
   void SortAndPrint();
-  std::vector<int> MergeInsertionSort(const std::vector<int> &v);
-  std::deque<int> MergeInsertionSort(const std::deque<int> &q);
+  std::vector<int> MergeInsertionSortV();
+  std::deque<int> MergeInsertionSortQ();
 
 private:
   PmergeMe();
@@ -45,8 +45,11 @@ private:
   PmergeMe &operator=(const PmergeMe &);
   void ParseNums(const std::list<std::string> &nums);
   void CreatePair(std::vector<PmergeNode> &v) const;
+  void RecurMergeInsertionSort(const std::vector<PmergeNode> &v);
 
   std::list<int> list_;
+  std::vector<PmergeNode> v_sorted_;
+  std::deque<PmergeNode> q_sorted_;
 };
 
 #endif // !PMERGE_ME_HPP

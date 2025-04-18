@@ -13,6 +13,7 @@ int main(int argc, char *argv[]) {
   try {
     std::list<std::string> list(argv + 1, argv + argc);
     PmergeMe p(list);
+    p.MergeInsertionSortV();
   } catch (const std::exception &e) {
     std::cerr << e.what() << "\n";
     usage(std::string(argv[0]) + " numbers");
