@@ -31,9 +31,15 @@ void PmergeMe::ParseNums(const std::list<std::string> &nums) {
     list_.push_back(n);
   }
 }
+void PmergeMe::SortAndPrint() {
+  std::vector<int> v = MergeInsertionSortV();
+  for (std::vector<int>::const_iterator it = v.begin(); it != v.end(); ++it) {
+    std::cout << *it << ' ';
+  }
+  std::cout << '\n';
+}
 
 std::vector<int> PmergeMe::MergeInsertionSortV() {
-  std::vector<int> vv(list_.begin(), list_.end());
   std::vector<PmergeNode> v;
   v.reserve(list_.size());
   for (std::list<int>::const_iterator it = list_.begin(); it != list_.end();
@@ -41,7 +47,13 @@ std::vector<int> PmergeMe::MergeInsertionSortV() {
     v.push_back(PmergeNode(*it));
   }
   RecurMergeInsertionSort(v);
-  return vv;
+  std::vector<int> re;
+  re.reserve(list_.size());
+  for (std::vector<PmergeNode>::const_iterator it = v_sorted_.begin();
+       it != v_sorted_.end(); ++it) {
+    v.push_back(it->bignum_);
+  }
+  return re;
 }
 
 void PmergeMe::RecurMergeInsertionSort(std::vector<PmergeNode> &v) {
@@ -76,8 +88,9 @@ void PmergeMe::RecurMergeInsertionSort(std::vector<PmergeNode> &v) {
 
   size_t cur_index = 1; // 要素挿入のために進んだ一番右端のindex
   size_t jacob_i = 0;
+  size_t cnt_inserted = 0;
   // pendをすべてmainに挿入する
-  for (size_t i = 0; i != pend.size(); ++i) {
+  while (cnt_inserted < pend_set.size()) {
     cur_index =
         std::min(cur_index + jacob_stahal_seq[jacob_i], v_sorted_.size() - 1);
     size_t jacob_cnt =
@@ -92,22 +105,31 @@ void PmergeMe::RecurMergeInsertionSort(std::vector<PmergeNode> &v) {
         ++reverse_cnt;
         continue;
       }
+      BinarySearchInsertion(0, reverse_i - 1, inserting_node);
+      // 挿入するためindexが右にずれる
+      ++cur_index;
+      --jacob_cnt;
+      ++cnt_inserted;
+      if (cnt_inserted >= pend_set.size()) {
+        break;
+      }
     }
   }
   if (v.size() % 2 != 0) {
     // vのあまりを挿入
+    BinarySearchInsertion(0, v_sorted_.size() - 1, &v[v.size() - 1]);
   }
 }
 
-/*1 2 3 4 5 8 9 10*/
 void PmergeMe::BinarySearchInsertion(size_t start, size_t end,
                                      const PmergeNode *key) {
   while (start <= end) {
     size_t middle = (start + end) / 2;
-    if (*key > v_sorted_[middle]) {
-      start = middle + 1;
-    } else {
+    if (*key < v_sorted_[middle]) {
       end = middle - 1;
+    } else {
+      start = middle + 1;
     }
   }
+  v_sorted_.insert(v_sorted_.begin() + start, *key);
 }
