@@ -121,7 +121,7 @@ void PmergeMe::RecurMergeInsertionSort(std::vector<PmergeNode> &v) {
   }
 }
 
-void PmergeMe::BinarySearchInsertion(size_t start, size_t end,
+void PmergeMe::BinarySearchInsertion(ssize_t start, ssize_t end,
                                      const PmergeNode *key) {
   while (start <= end) {
     size_t middle = (start + end) / 2;

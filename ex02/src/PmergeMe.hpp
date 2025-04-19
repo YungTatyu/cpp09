@@ -6,6 +6,7 @@
 #include <list>
 #include <stack>
 #include <string>
+#include <sys/types.h>
 #include <vector>
 
 class PmergeNode {
@@ -58,7 +59,7 @@ private:
   PmergeMe &operator=(const PmergeMe &);
   void ParseNums(const std::list<std::string> &nums);
   void RecurMergeInsertionSort(std::vector<PmergeNode> &v);
-  void BinarySearchInsertion(size_t start, size_t end, const PmergeNode *key);
+  void BinarySearchInsertion(ssize_t start, ssize_t end, const PmergeNode *key);
 
   std::list<int> list_;
   std::vector<PmergeNode> v_sorted_;
