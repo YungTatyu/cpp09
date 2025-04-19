@@ -13,6 +13,28 @@
 class PmergeNode {
 public:
   PmergeNode(int v) { bignum_ = v; }
+  ~PmergeNode() {}
+  bool operator>(const PmergeNode &other) const {
+    return bignum_ > other.bignum_;
+  }
+  bool operator<(const PmergeNode &other) const {
+    return bignum_ < other.bignum_;
+  }
+  void push(PmergeNode *node) {
+    pairs_.push(node);
+    pairs_.pop();
+  }
+  PmergeNode *pop() {
+    PmergeNode *re = pairs_.top();
+    pairs_.pop();
+    return re;
+  }
+
+  int bignum_;
+  std::stack<PmergeNode *> pairs_;
+
+private:
+  PmergeNode();
   PmergeNode(const PmergeNode &other) { *this = other; }
   PmergeNode &operator=(const PmergeNode &other) {
     if (this != &other) {
@@ -21,28 +43,6 @@ public:
     }
     return *this;
   }
-  ~PmergeNode() {}
-  bool operator>(const PmergeNode &other) const {
-    return bignum_ > other.bignum_;
-  }
-  bool operator<(const PmergeNode &other) const {
-    return bignum_ < other.bignum_;
-  }
-  void push(const PmergeNode *node) {
-    pairs_.push(node);
-    pairs_.pop();
-  }
-  const PmergeNode *pop() {
-    const PmergeNode *re = pairs_.top();
-    pairs_.pop();
-    return re;
-  }
-
-  int bignum_;
-  std::stack<const PmergeNode *> pairs_;
-
-private:
-  PmergeNode();
 };
 
 class PmergeMe {
@@ -59,12 +59,12 @@ private:
   PmergeMe(const PmergeMe &);
   PmergeMe &operator=(const PmergeMe &);
   void ParseNums(const std::list<std::string> &nums);
-  void RecurMergeInsertionSort(std::vector<PmergeNode> &v);
-  void BinarySearchInsertion(ssize_t start, ssize_t end, const PmergeNode *key);
+  void RecurMergeInsertionSort(std::vector<PmergeNode *> &v);
+  void BinarySearchInsertion(ssize_t start, ssize_t end, PmergeNode *key);
 
   std::list<int> list_;
   std::set<PmergeNode *> v_inserted_;
-  std::vector<PmergeNode> v_sorted_;
+  std::vector<PmergeNode *> v_sorted_;
   std::deque<PmergeNode> q_sorted_;
 };
 
