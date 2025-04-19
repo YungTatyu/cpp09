@@ -78,23 +78,24 @@ void PmergeMe::RecurMergeInsertionSort(std::vector<PmergeNode *> &v) {
   }
   std::cout << "\n";
   RecurMergeInsertionSort(pend);
-  // 一番低い数字は左端で確定なのではじめに挿入
   std::cout << pend.size() << ": size\n";
   std::cout << pend.front()->bignum_ << ": num\n";
+  // 一番低い数字は左端で確定なのではじめに挿入
   v_sorted_.insert(v_sorted_.begin(), pend.front());
+  /*pend.erase(pend.begin());*/
   std::cout << "inserted front\n";
 
-  /*std::set<const PmergeNode *> pend_set;*/
-  /*for (std::vector<PmergeNode>::const_iterator it = pend.begin() + 1;*/
-  /*     it != pend.end(); ++it) {*/
-  /*  pend_set.insert(&(*it));*/
-  /*}*/
+  std::set<const PmergeNode *> pend_set;
+  for (std::vector<PmergeNode *>::const_iterator it = pend.begin() + 1;
+       it != pend.end(); ++it) {
+    pend_set.insert(*it);
+  }
 
   size_t cur_index = 1; // 要素挿入のために進んだ一番右端のindex
   size_t jacob_i = 0;
   size_t cnt_inserted = 0;
   // pendをすべてmainに挿入する
-  while (cnt_inserted < pend.size()) {
+  while (cnt_inserted < pend_set.size()) {
     cur_index =
         std::min(cur_index + jacob_stahal_seq[jacob_i], v_sorted_.size() - 1);
     size_t jacob_cnt =
@@ -103,18 +104,20 @@ void PmergeMe::RecurMergeInsertionSort(std::vector<PmergeNode *> &v) {
     size_t reverse_i = cur_index; // 挿入するnodeのindex
     size_t reverse_cnt = 0;       // 挿入しなかったnodeのcount
     while (jacob_cnt != 0) {
-      if (v_inserted_.find(v_sorted_[reverse_i]) != v_inserted_.end()) {
+      if (pend_set.find(v_sorted_[reverse_i]) != pend_set.end()) {
         --reverse_i;
         ++reverse_cnt;
         continue;
       }
+      // pendのpairを挿入
       PmergeNode *inserting_node = v_sorted_[reverse_i]->pop();
       BinarySearchInsertion(0, reverse_i - 1, inserting_node);
+      pend_set.erase(inserting_node);
       // 挿入するためindexが右にずれる
       ++cur_index;
       --jacob_cnt;
       ++cnt_inserted;
-      if (cnt_inserted >= pend.size()) {
+      if (cnt_inserted >= pend_set.size()) {
         break;
       }
     }
@@ -137,7 +140,6 @@ void PmergeMe::BinarySearchInsertion(ssize_t start, ssize_t end,
       start = middle + 1;
     }
   }
-  std::cerr << "inserting " << key->bignum_ << " at index " << start;
+  std::cerr << "inserting " << key->bignum_ << " at index " << start << '\n';
   v_sorted_.insert(v_sorted_.begin() + start, key);
-  v_inserted_.insert(v_sorted_[start]);
 }

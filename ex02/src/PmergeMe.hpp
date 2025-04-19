@@ -63,7 +63,6 @@ private:
   void BinarySearchInsertion(ssize_t start, ssize_t end, PmergeNode *key);
 
   std::list<int> list_;
-  std::set<PmergeNode *> v_inserted_;
   std::vector<PmergeNode *> v_sorted_;
   std::deque<PmergeNode> q_sorted_;
 };
