@@ -4,6 +4,7 @@
 #include <cstddef>
 #include <deque>
 #include <list>
+#include <set>
 #include <stack>
 #include <string>
 #include <sys/types.h>
@@ -62,6 +63,7 @@ private:
   void BinarySearchInsertion(ssize_t start, ssize_t end, const PmergeNode *key);
 
   std::list<int> list_;
+  std::set<PmergeNode *> v_inserted_;
   std::vector<PmergeNode> v_sorted_;
   std::deque<PmergeNode> q_sorted_;
 };

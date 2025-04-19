@@ -42,6 +42,8 @@ void PmergeMe::SortAndPrint() {
 std::vector<int> PmergeMe::MergeInsertionSortV() {
   std::vector<PmergeNode> v;
   v.reserve(list_.size());
+  // WARN: これがないとメモリが再確保されて壊れる
+  v_sorted_.reserve(list_.size());
   for (std::list<int>::const_iterator it = list_.begin(); it != list_.end();
        ++it) {
     v.push_back(PmergeNode(*it));
@@ -80,17 +82,17 @@ void PmergeMe::RecurMergeInsertionSort(std::vector<PmergeNode> &v) {
   // 一番低い数字は左端で確定なのではじめに挿入
   v_sorted_.insert(pend.begin(), pend.front());
 
-  std::set<const PmergeNode *> pend_set;
-  for (std::vector<PmergeNode>::const_iterator it = pend.begin() + 1;
-       it != pend.end(); ++it) {
-    pend_set.insert(&(*it));
-  }
+  /*std::set<const PmergeNode *> pend_set;*/
+  /*for (std::vector<PmergeNode>::const_iterator it = pend.begin() + 1;*/
+  /*     it != pend.end(); ++it) {*/
+  /*  pend_set.insert(&(*it));*/
+  /*}*/
 
   size_t cur_index = 1; // 要素挿入のために進んだ一番右端のindex
   size_t jacob_i = 0;
   size_t cnt_inserted = 0;
   // pendをすべてmainに挿入する
-  while (cnt_inserted < pend_set.size()) {
+  while (cnt_inserted < pend.size()) {
     cur_index =
         std::min(cur_index + jacob_stahal_seq[jacob_i], v_sorted_.size() - 1);
     size_t jacob_cnt =
@@ -99,18 +101,18 @@ void PmergeMe::RecurMergeInsertionSort(std::vector<PmergeNode> &v) {
     size_t reverse_i = cur_index; // 挿入するnodeのindex
     size_t reverse_cnt = 0;       // 挿入しなかったnodeのcount
     while (jacob_cnt != 0) {
-      const PmergeNode *inserting_node = v_sorted_[cur_index].pop();
-      if (pend_set.find(inserting_node) == pend_set.end()) {
+      if (v_inserted_.find(&v_sorted_[reverse_i]) != v_inserted_.end()) {
         --reverse_i;
         ++reverse_cnt;
         continue;
       }
+      const PmergeNode *inserting_node = v_sorted_[reverse_i].pop();
       BinarySearchInsertion(0, reverse_i - 1, inserting_node);
       // 挿入するためindexが右にずれる
       ++cur_index;
       --jacob_cnt;
       ++cnt_inserted;
-      if (cnt_inserted >= pend_set.size()) {
+      if (cnt_inserted >= pend.size()) {
         break;
       }
     }
@@ -132,4 +134,5 @@ void PmergeMe::BinarySearchInsertion(ssize_t start, ssize_t end,
     }
   }
   v_sorted_.insert(v_sorted_.begin() + start, *key);
+  v_inserted_.insert(&v_sorted_[start]);
 }
