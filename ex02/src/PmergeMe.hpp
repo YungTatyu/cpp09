@@ -47,7 +47,7 @@ public:
   PmergeMe(const std::list<std::string> &nums);
   ~PmergeMe();
   void SortAndPrint();
-  std::vector<int> MergeInsertionSortV();
+  std::vector<int> MergeInsertionSortV(const std::list<int> *nums);
   std::deque<int> MergeInsertionSortQ();
   static const size_t jacob_stahal_seq[];
 

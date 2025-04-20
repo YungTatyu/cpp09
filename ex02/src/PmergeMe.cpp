@@ -62,6 +62,7 @@ const size_t PmergeMe::jacob_stahal_seq[] = {
     375299968947541UL * 2,
     750599937895083UL * 2,
 };
+
 PmergeMe::PmergeMe(const std::list<std::string> &nums) {
   this->ParseNums(nums);
 }
@@ -80,15 +81,12 @@ void PmergeMe::ParseNums(const std::list<std::string> &nums) {
     list_.push_back(n);
   }
 }
-void PmergeMe::SortAndPrint() {
-  std::vector<int> v = MergeInsertionSortV();
-  for (std::vector<int>::const_iterator it = v.begin(); it != v.end(); ++it) {
-    std::cout << *it << ' ';
-  }
-  std::cout << '\n';
-}
 
-std::vector<int> PmergeMe::MergeInsertionSortV() {
+std::vector<int>
+PmergeMe::MergeInsertionSortV(const std::list<int> *nums = NULL) {
+  if (nums != NULL) {
+    list_ = *nums;
+  }
   std::vector<PmergeNode *> v;
   v.reserve(list_.size());
   for (std::list<int>::const_iterator it = list_.begin(); it != list_.end();
@@ -184,4 +182,12 @@ void PmergeMe::BinarySearchInsertion(ssize_t start, ssize_t end,
     }
   }
   v_sorted_.insert(v_sorted_.begin() + start, key);
+}
+
+void PmergeMe::SortAndPrint() {
+  std::vector<int> v = MergeInsertionSortV();
+  for (std::vector<int>::const_iterator it = v.begin(); it != v.end(); ++it) {
+    std::cout << *it << ' ';
+  }
+  std::cout << '\n';
 }
