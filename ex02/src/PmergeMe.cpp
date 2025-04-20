@@ -70,6 +70,11 @@ void PmergeMe::RecurMergeInsertionSort(std::vector<PmergeNode *> &v) {
     v_sorted_.push_back(p->pop());
     v_sorted_.push_back(p);
     std::cout << "pushed front and pair\n";
+    for (std::vector<PmergeNode *>::const_iterator it = v_sorted_.begin();
+         it != v_sorted_.end(); ++it) {
+      std::cout << (*it)->bignum_ << " ";
+    }
+    std::cout << "\n";
     return;
   }
   std::vector<PmergeNode *> paired_v;
@@ -109,8 +114,13 @@ void PmergeMe::RecurMergeInsertionSort(std::vector<PmergeNode *> &v) {
   std::cout << ": pend set\n";
   // 一番低い数字は左端で確定なのではじめに挿入
   std::cout << v.front()->bignum_ << ": num\n";
-  /*v_sorted_.insert(v_sorted_.begin(), (*v_sorted_.begin())->pop());*/
-  v_sorted_.insert(v_sorted_.begin(), v.front()->pop());
+  v_sorted_.insert(v_sorted_.begin(), v_sorted_.front()->pop());
+  std::cout << "inserted-------------------------------\n";
+  for (std::vector<PmergeNode *>::const_iterator it = v_sorted_.begin();
+       it != v_sorted_.end(); ++it) {
+    std::cout << (*it)->bignum_ << " ";
+  }
+  std::cout << "\n";
 
   size_t cur_index = 1; // 要素挿入のために進んだ一番右端のindex
   size_t jacob_i = 0;
@@ -161,4 +171,10 @@ void PmergeMe::BinarySearchInsertion(ssize_t start, ssize_t end,
   }
   std::cerr << "inserting " << key->bignum_ << " at index " << start << '\n';
   v_sorted_.insert(v_sorted_.begin() + start, key);
+  std::cout << "inserted-------------------------------\n";
+  for (std::vector<PmergeNode *>::const_iterator it = v_sorted_.begin();
+       it != v_sorted_.end(); ++it) {
+    std::cout << (*it)->bignum_ << " ";
+  }
+  std::cout << "\n";
 }
