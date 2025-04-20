@@ -59,9 +59,9 @@ private:
   void RecurMergeInsertionSort(std::vector<PmergeNode *> &v);
   void BinarySearchInsertion(ssize_t start, ssize_t end, PmergeNode *key);
 
-  std::list<int> list_;
-  std::vector<PmergeNode *> v_sorted_;
-  std::deque<PmergeNode> q_sorted_;
+  std::list<int> nums_;
+  std::vector<PmergeNode *> v_main_;
+  std::deque<PmergeNode> dq_main_;
 };
 
 #endif // !PMERGE_ME_HPP
