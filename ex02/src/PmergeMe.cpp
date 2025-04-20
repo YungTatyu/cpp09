@@ -106,8 +106,8 @@ void PmergeMe::RecurMergeInsertionSort(std::vector<PmergeNode *> &v) {
   std::cout << v.size() << ": pend size\n";
   std::set<const PmergeNode *> pend_set;
   // 一番低い数字は飛ばす
-  for (std::vector<PmergeNode *>::const_iterator it = v.begin() + 1;
-       it != v.end(); ++it) {
+  for (std::vector<PmergeNode *>::const_iterator it = v_sorted_.begin() + 1;
+       it != v_sorted_.end(); ++it) {
     pend_set.insert(*it);
     std::cout << (*it)->bignum_ << " ";
   }
