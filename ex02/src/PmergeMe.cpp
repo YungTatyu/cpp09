@@ -63,6 +63,8 @@ const size_t PmergeMe::jacob_stahal_seq[] = {
     750599937895083UL * 2,
 };
 
+PmergeMe::PmergeMe() {}
+
 PmergeMe::PmergeMe(const std::list<std::string> &nums) {
   this->ParseNums(nums);
 }

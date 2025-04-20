@@ -44,15 +44,14 @@ private:
 
 class PmergeMe {
 public:
+  PmergeMe();
   PmergeMe(const std::list<std::string> &nums);
   ~PmergeMe();
   void SortAndPrint();
   std::vector<int> MergeInsertionSortV(const std::list<int> *nums);
-  std::deque<int> MergeInsertionSortQ();
-  static const size_t jacob_stahal_seq[];
+  std::deque<int> MergeInsertionSortDq(const std::list<int> *nums);
 
 private:
-  PmergeMe();
   PmergeMe(const PmergeMe &);
   PmergeMe &operator=(const PmergeMe &);
   void ParseNums(const std::list<std::string> &nums);
@@ -62,6 +61,7 @@ private:
   std::list<int> nums_;
   std::vector<PmergeNode *> v_main_;
   std::deque<PmergeNode> dq_main_;
+  static const size_t jacob_stahal_seq[];
 };
 
 #endif // !PMERGE_ME_HPP
