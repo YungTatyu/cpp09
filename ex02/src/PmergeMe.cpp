@@ -89,6 +89,9 @@ void PmergeMe::RecurMergeInsertionSort(std::vector<PmergeNode *> &v) {
   }
   std::cout << "\n";
   RecurMergeInsertionSort(paired_v);
+  /*if (paired_v.size() == list_.size()) {*/
+  /*  return;*/
+  /*}*/
   std::cout << "\n\npending: ";
   std::cout << v.size() << ": pend size\n";
   std::set<const PmergeNode *> pend_set;
@@ -102,13 +105,15 @@ void PmergeMe::RecurMergeInsertionSort(std::vector<PmergeNode *> &v) {
   // 一番低い数字は左端で確定なのではじめに挿入
   std::cout << v.front()->bignum_ << ": num\n";
   /*v_sorted_.insert(v_sorted_.begin(), (*v_sorted_.begin())->pop());*/
-  v_sorted_.insert(v.begin(), v.front()->pop());
+  v_sorted_.insert(v_sorted_.begin(), v.front()->pop());
 
   size_t cur_index = 1; // 要素挿入のために進んだ一番右端のindex
   size_t jacob_i = 0;
   size_t cnt_inserted = 0;
+  std::cout << "loop\n";
   // pendをすべてmainに挿入する
   while (cnt_inserted < pend_set.size()) {
+    std::cout << "cnt_inserted: " << cnt_inserted << '\n';
     cur_index =
         std::min(cur_index + jacob_stahal_seq[jacob_i], v_sorted_.size() - 1);
     size_t jacob_cnt =
@@ -116,6 +121,7 @@ void PmergeMe::RecurMergeInsertionSort(std::vector<PmergeNode *> &v) {
     ++jacob_i;
     size_t reverse_i = cur_index; // 挿入するnodeのindex
     while (jacob_cnt != 0) {
+      std::cout << "reverse_i: " << reverse_i << '\n';
       if (pend_set.find(v_sorted_[reverse_i]) == pend_set.end()) {
         --reverse_i;
         continue;
