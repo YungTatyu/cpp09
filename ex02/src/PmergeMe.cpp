@@ -89,9 +89,14 @@ void PmergeMe::RecurMergeInsertionSort(std::vector<PmergeNode *> &v) {
   }
   std::cout << "\n";
   RecurMergeInsertionSort(paired_v);
-  /*if (paired_v.size() == list_.size()) {*/
-  /*  return;*/
-  /*}*/
+  if (v.size() % 2 != 0) {
+    std::cout << v[v.size() - 1]->bignum_ << " inserting: the rest of pair\n";
+    // vのあまりを挿入
+    BinarySearchInsertion(0, v_sorted_.size() - 1, v[v.size() - 1]);
+  }
+  if (v_sorted_.size() == list_.size()) {
+    return;
+  }
   std::cout << "\n\npending: ";
   std::cout << v.size() << ": pend size\n";
   std::set<const PmergeNode *> pend_set;
@@ -142,17 +147,12 @@ void PmergeMe::RecurMergeInsertionSort(std::vector<PmergeNode *> &v) {
     }
   }
   std::cout << "pend inserted\n";
-  if (v.size() % 2 != 0) {
-    std::cout << v[v.size() - 1]->bignum_ << " inserting: the rest of pair\n";
-    // vのあまりを挿入
-    BinarySearchInsertion(0, v_sorted_.size() - 1, v[v.size() - 1]);
-  }
 }
 
 void PmergeMe::BinarySearchInsertion(ssize_t start, ssize_t end,
                                      PmergeNode *key) {
   while (start <= end) {
-    size_t middle = (start + end) / 2;
+    size_t middle = start + (end - start) / 2;
     if (*key < *v_sorted_[middle]) {
       end = middle - 1;
     } else {
