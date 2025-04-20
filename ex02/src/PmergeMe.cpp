@@ -53,53 +53,56 @@ std::vector<int> PmergeMe::MergeInsertionSortV() {
   RecurMergeInsertionSort(v);
   std::vector<int> re;
   re.reserve(list_.size());
-  for (size_t i = 0; i < v.size(); ++i) {
-    re.push_back(v[i]->bignum_);
+  for (size_t i = 0; i < v_sorted_.size(); ++i) {
+    re.push_back(v_sorted_[i]->bignum_);
   }
   return re;
 }
 
 void PmergeMe::RecurMergeInsertionSort(std::vector<PmergeNode *> &v) {
+  for (std::vector<PmergeNode *>::const_iterator it = v.begin(); it != v.end();
+       ++it) {
+    std::cout << (*it)->bignum_ << " ";
+  }
+  std::cout << " :v\n";
   if (v.size() < 2) {
+    PmergeNode *p = v.front();
+    v_sorted_.push_back(p->pop());
+    v_sorted_.push_back(p);
+    std::cout << "pushed front and pair\n";
     return;
   }
-  std::vector<PmergeNode *> pend;
-  pend.reserve(v.size() / 2);
+  std::vector<PmergeNode *> paired_v;
+  paired_v.reserve(v.size() / 2);
   for (size_t i = 0; i + 1 < v.size(); i += 2) {
     if (v[i]->bignum_ > v[i + 1]->bignum_) {
       v[i]->push(v[i + 1]);
-      pend.push_back(v[i]);
+      paired_v.push_back(v[i]);
     } else {
       v[i + 1]->push(v[i]);
-      pend.push_back(v[i + 1]);
+      paired_v.push_back(v[i + 1]);
     }
   }
-  for (std::vector<PmergeNode *>::const_iterator it = pend.begin();
-       it != pend.end(); ++it) {
+  for (std::vector<PmergeNode *>::const_iterator it = paired_v.begin();
+       it != paired_v.end(); ++it) {
     std::cout << (*it)->bignum_ << " ";
   }
   std::cout << "\n";
-  RecurMergeInsertionSort(pend);
+  RecurMergeInsertionSort(paired_v);
   std::cout << "\n\npending: ";
-  for (std::vector<PmergeNode *>::const_iterator it = pend.begin();
-       it != pend.end(); ++it) {
-    std::cout << (*it)->bignum_ << " ";
-  }
-  std::cout << "\n";
-  std::cout << pend.size() << ": pend size\n";
-  std::cout << pend.front()->bignum_ << ": num\n";
-  // 一番低い数字は左端で確定なのではじめに挿入
-  v_sorted_.insert(v_sorted_.begin(), pend.front());
-  /*pend.erase(pend.begin());*/
-  std::cout << pend.front()->bignum_ << ": inserted front\n";
-
+  std::cout << v.size() << ": pend size\n";
   std::set<const PmergeNode *> pend_set;
-  for (std::vector<PmergeNode *>::const_iterator it = pend.begin() + 1;
-       it != pend.end(); ++it) {
+  // 一番低い数字は飛ばす
+  for (std::vector<PmergeNode *>::const_iterator it = v.begin() + 1;
+       it != paired_v.end(); ++it) {
     pend_set.insert(*it);
     std::cout << (*it)->bignum_ << " ";
   }
   std::cout << ": pend set\n";
+  // 一番低い数字は左端で確定なのではじめに挿入
+  std::cout << v.front()->bignum_ << ": num\n";
+  /*v_sorted_.insert(v_sorted_.begin(), (*v_sorted_.begin())->pop());*/
+  v_sorted_.insert(v.begin(), v.front()->pop());
 
   size_t cur_index = 1; // 要素挿入のために進んだ一番右端のindex
   size_t jacob_i = 0;
@@ -120,6 +123,7 @@ void PmergeMe::RecurMergeInsertionSort(std::vector<PmergeNode *> &v) {
       std::cout << "big num: " << v_sorted_[reverse_i]->bignum_ << '\n';
       // pendのpairを挿入
       PmergeNode *inserting_node = v_sorted_[reverse_i]->pop();
+      /*PmergeNode *inserting_node = v_sorted_[reverse_i];*/
       BinarySearchInsertion(0, reverse_i - 1, inserting_node);
       pend_set.erase(inserting_node);
       // 挿入するためindexが右にずれる

@@ -20,10 +20,8 @@ public:
   bool operator<(const PmergeNode &other) const {
     return bignum_ < other.bignum_;
   }
-  void push(PmergeNode *node) {
-    pairs_.push(node);
-    pairs_.pop();
-  }
+  void push(PmergeNode *node) { pairs_.push(node); }
+
   PmergeNode *pop() {
     PmergeNode *re = pairs_.top();
     pairs_.pop();
