@@ -9,10 +9,59 @@
 #include <string>
 #include <vector>
 
-const int PmergeMe::jacob_stahal_seq[] = {
-    2, 2, 6, 10, 22, 42, 86, 170, 342, 682, 1366, 2730, 5462,
+const size_t PmergeMe::jacob_stahal_seq[] = {
+    1UL * 2,
+    1UL * 2,
+    3UL * 2,
+    5UL * 2,
+    11UL * 2,
+    21UL * 2,
+    43UL * 2,
+    85UL * 2,
+    171UL * 2,
+    341UL * 2,
+    683UL * 2,
+    1365UL * 2,
+    2731UL * 2,
+    5461UL * 2,
+    10923UL * 2,
+    21845UL * 2,
+    43691UL * 2,
+    87381UL * 2,
+    174763UL * 2,
+    349525UL * 2,
+    699051UL * 2,
+    1398101UL * 2,
+    2796203UL * 2,
+    5592405UL * 2,
+    11184811UL * 2,
+    22369621UL * 2,
+    44739243UL * 2,
+    89478485UL * 2,
+    178956971UL * 2,
+    357913941UL * 2,
+    715827883UL * 2,
+    1431655765UL * 2,
+    2863311531UL * 2,
+    5726623061UL * 2,
+    11453246123UL * 2,
+    22906492245UL * 2,
+    45812984491UL * 2,
+    91625968981UL * 2,
+    183251937963UL * 2,
+    366503875925UL * 2,
+    733007751851UL * 2,
+    1466015503701UL * 2,
+    2932031007403UL * 2,
+    5864062014805UL * 2,
+    11728124029611UL * 2,
+    23456248059221UL * 2,
+    46912496118443UL * 2,
+    93824992236885UL * 2,
+    187649984473771UL * 2,
+    375299968947541UL * 2,
+    750599937895083UL * 2,
 };
-
 PmergeMe::PmergeMe(const std::list<std::string> &nums) {
   this->ParseNums(nums);
 }
@@ -42,6 +91,10 @@ void PmergeMe::SortAndPrint() {
 std::vector<int> PmergeMe::MergeInsertionSortV() {
   std::vector<PmergeNode *> v;
   v.reserve(list_.size());
+  for (std::list<int>::const_iterator it = list_.begin(); it != list_.end();
+       ++it) {
+    v.push_back(new PmergeNode(*it));
+  }
   v_sorted_.reserve(list_.size());
   RecurMergeInsertionSort(v);
   std::vector<int> re;

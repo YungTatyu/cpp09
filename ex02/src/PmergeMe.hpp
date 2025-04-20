@@ -4,7 +4,6 @@
 #include <cstddef>
 #include <deque>
 #include <list>
-#include <set>
 #include <stack>
 #include <string>
 #include <sys/types.h>
@@ -50,7 +49,7 @@ public:
   void SortAndPrint();
   std::vector<int> MergeInsertionSortV();
   std::deque<int> MergeInsertionSortQ();
-  static const int jacob_stahal_seq[];
+  static const size_t jacob_stahal_seq[];
 
 private:
   PmergeMe();
