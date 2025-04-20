@@ -91,6 +91,9 @@ PmergeMe::MergeInsertionSortV(const std::list<int> *nums = NULL) {
   }
   std::vector<PmergeNode *> v;
   v.reserve(nums_.size());
+  if (nums_.size() == 1) {
+    return std::vector<int>(nums_.begin(), nums_.end());
+  }
   for (std::list<int>::const_iterator it = nums_.begin(); it != nums_.end();
        ++it) {
     v.push_back(new PmergeNode(*it));
