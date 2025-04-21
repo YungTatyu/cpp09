@@ -135,11 +135,13 @@ void PmergeMe::RecurMergeInsertionSort(std::vector<PmergeNode *> &v) {
   if (v_main_.size() == nums_.size()) {
     return;
   }
-  std::set<const PmergeNode *> pend_set;
+
+  // mainに挿入したいnodeのペアを管理
+  std::set<const PmergeNode *> pend;
   // 一番低い数字は飛ばす
   for (std::vector<PmergeNode *>::const_iterator it = v_main_.begin() + 1;
        it != v_main_.end(); ++it) {
-    pend_set.insert(*it);
+    pend.insert(*it);
   }
   // 一番低い数字は左端で確定なのではじめに挿入
   v_main_.insert(v_main_.begin(), v_main_.front()->pop());
@@ -147,8 +149,8 @@ void PmergeMe::RecurMergeInsertionSort(std::vector<PmergeNode *> &v) {
   size_t cur_index = 1; // 要素挿入のために進んだ一番右端のindex
   size_t jacob_i = 0;
   size_t cnt_inserted = 0;
-  // pendをすべてmainに挿入する
-  while (cnt_inserted < pend_set.size()) {
+  // pendのペアをすべてmainに挿入する
+  while (cnt_inserted < pend.size()) {
     cur_index =
         std::min(cur_index + jacob_stahal_seq[jacob_i], v_main_.size() - 1);
     size_t jacob_cnt =
@@ -156,20 +158,19 @@ void PmergeMe::RecurMergeInsertionSort(std::vector<PmergeNode *> &v) {
     ++jacob_i;
     size_t reverse_i = cur_index; // 挿入するnodeのindex
     while (jacob_cnt != 0) {
-      if (pend_set.find(v_main_[reverse_i]) == pend_set.end()) {
+      if (pend.find(v_main_[reverse_i]) == pend.end()) {
         --reverse_i;
         continue;
       }
       // pendのpairを挿入
       PmergeNode *inserting_node = v_main_[reverse_i]->pop();
-      /*PmergeNode *inserting_node = v_sorted_[reverse_i];*/
       BinarySearchInsertion(0, reverse_i - 1, inserting_node);
-      pend_set.erase(inserting_node);
+      pend.erase(inserting_node);
       // 挿入するためindexが右にずれる
       ++cur_index;
       --jacob_cnt;
       ++cnt_inserted;
-      if (cnt_inserted >= pend_set.size()) {
+      if (cnt_inserted >= pend.size()) {
         break;
       }
     }
