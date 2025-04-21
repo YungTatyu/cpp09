@@ -209,9 +209,9 @@ void PmergeMe::BinarySearchInsertionVec(ssize_t start, ssize_t end,
   while (start <= end) {
     size_t middle = static_cast<size_t>(start + (end - start) / 2);
     if (*key < *vec_main_[middle]) {
-      end = middle - 1;
+      end = static_cast<ssize_t>(middle) - 1;
     } else {
-      start = middle + 1;
+      start = static_cast<ssize_t>(middle) + 1;
     }
   }
   vec_main_.insert(vec_main_.begin() + start, key);
@@ -334,9 +334,9 @@ void PmergeMe::BinarySearchInsertionDq(ssize_t start, ssize_t end,
   while (start <= end) {
     size_t middle = static_cast<size_t>(start + (end - start) / 2);
     if (*key < *dq_main_[middle]) {
-      end = middle - 1;
+      end = static_cast<ssize_t>(middle) - 1;
     } else {
-      start = middle + 1;
+      start = static_cast<ssize_t>(middle) + 1;
     }
   }
   dq_main_.insert(dq_main_.begin() + start, key);
