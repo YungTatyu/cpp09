@@ -132,3 +132,105 @@ TEST(mis_test, vec_tenthousands_elements) {
     EXPECT_EQ(actual, expect);
   }
 }
+
+TEST(mis_test, dq_one_element1) {
+  PmergeMe p;
+  std::list<int> list = {1};
+
+  std::deque<int> actual = p.MergeInsertionSortDq(&list);
+  std::deque<int> expect(list.begin(), list.end());
+  std::sort(expect.begin(), expect.end());
+  EXPECT_EQ(actual, expect);
+}
+
+TEST(mis_test, dq_one_element2) {
+  PmergeMe p;
+  std::list<int> list = {-100};
+
+  std::deque<int> actual = p.MergeInsertionSortDq(&list);
+  std::deque<int> expect(list.begin(), list.end());
+  std::sort(expect.begin(), expect.end());
+  EXPECT_EQ(actual, expect);
+}
+
+TEST(mis_test, dq_one_element3) {
+  PmergeMe p;
+  std::list<int> list = {0};
+
+  std::deque<int> actual = p.MergeInsertionSortDq(&list);
+  std::deque<int> expect(list.begin(), list.end());
+  std::sort(expect.begin(), expect.end());
+  EXPECT_EQ(actual, expect);
+}
+
+TEST(mis_test, dq_two_elements) {
+  for (int i = 0; i < 10; ++i) {
+    PmergeMe p;
+    std::list<int> list = test::GenerateRandomList(2);
+
+    std::deque<int> actual = p.MergeInsertionSortDq(&list);
+    std::deque<int> expect(list.begin(), list.end());
+    std::sort(expect.begin(), expect.end());
+    EXPECT_EQ(actual, expect);
+  }
+}
+
+TEST(mis_test, dq_three_elements) {
+  for (int i = 0; i < 10; ++i) {
+    PmergeMe p;
+    std::list<int> list = test::GenerateRandomList(3);
+
+    std::deque<int> actual = p.MergeInsertionSortDq(&list);
+    std::deque<int> expect(list.begin(), list.end());
+    std::sort(expect.begin(), expect.end());
+    EXPECT_EQ(actual, expect);
+  }
+}
+
+TEST(mis_test, dq_four_elements) {
+  for (int i = 0; i < 10; ++i) {
+    PmergeMe p;
+    std::list<int> list = test::GenerateRandomList(4);
+
+    std::deque<int> actual = p.MergeInsertionSortDq(&list);
+    std::deque<int> expect(list.begin(), list.end());
+    std::sort(expect.begin(), expect.end());
+    EXPECT_EQ(actual, expect);
+  }
+}
+
+TEST(mis_test, dq_five_elements) {
+  for (int i = 0; i < 10; ++i) {
+    PmergeMe p;
+    std::list<int> list = test::GenerateRandomList(5);
+
+    std::deque<int> actual = p.MergeInsertionSortDq(&list);
+    std::deque<int> expect(list.begin(), list.end());
+    std::sort(expect.begin(), expect.end());
+    EXPECT_EQ(actual, expect);
+  }
+}
+
+TEST(mis_test, dq_threethousands_elements) {
+  for (int i = 0; i < 10; ++i) {
+    PmergeMe p;
+    std::list<int> list = test::GenerateRandomList(3000);
+
+    std::deque<int> actual = p.MergeInsertionSortDq(&list);
+    std::deque<int> expect(list.begin(), list.end());
+    std::sort(expect.begin(), expect.end());
+    EXPECT_EQ(actual, expect);
+  }
+}
+
+TEST(mis_test, dq_tenthousands_elements) {
+  for (int i = 0; i < 10; ++i) {
+    PmergeMe p;
+    std::list<int> list = test::GenerateRandomList(10000);
+
+    std::deque<int> actual = p.MergeInsertionSortDq(&list);
+    std::deque<int> expect(list.begin(), list.end());
+    std::sort(expect.begin(), expect.end());
+    EXPECT_EQ(actual, expect);
+  }
+}
