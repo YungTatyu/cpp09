@@ -207,7 +207,7 @@ void PmergeMe::RecurMergeInsertionSort(std::vector<PmergeNode *> &v) {
 void PmergeMe::BinarySearchInsertionVec(ssize_t start, ssize_t end,
                                         PmergeNode *key) {
   while (start <= end) {
-    size_t middle = start + (end - start) / 2;
+    ssize_t middle = start + (end - start) / 2;
     if (*key < *vec_main_[middle]) {
       end = middle - 1;
     } else {
@@ -332,7 +332,7 @@ void PmergeMe::RecurMergeInsertionSort(std::deque<PmergeNode *> &q) {
 void PmergeMe::BinarySearchInsertionDq(ssize_t start, ssize_t end,
                                        PmergeNode *key) {
   while (start <= end) {
-    size_t middle = start + (end - start) / 2;
+    ssize_t middle = start + (end - start) / 2;
     if (*key < *dq_main_[middle]) {
       end = middle - 1;
     } else {
