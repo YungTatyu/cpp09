@@ -108,3 +108,27 @@ TEST(mis_test, vec_five_elements) {
     EXPECT_EQ(actual, expect);
   }
 }
+
+TEST(mis_test, vec_threethousands_elements) {
+  for (int i = 0; i < 10; ++i) {
+    PmergeMe p;
+    std::list<int> list = test::GenerateRandomList(3000);
+
+    std::vector<int> actual = p.MergeInsertionSortV(&list);
+    std::vector<int> expect(list.begin(), list.end());
+    std::sort(expect.begin(), expect.end());
+    EXPECT_EQ(actual, expect);
+  }
+}
+
+TEST(mis_test, vec_tenthousands_elements) {
+  for (int i = 0; i < 10; ++i) {
+    PmergeMe p;
+    std::list<int> list = test::GenerateRandomList(10000);
+
+    std::vector<int> actual = p.MergeInsertionSortV(&list);
+    std::vector<int> expect(list.begin(), list.end());
+    std::sort(expect.begin(), expect.end());
+    EXPECT_EQ(actual, expect);
+  }
+}
