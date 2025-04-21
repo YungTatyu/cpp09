@@ -135,7 +135,8 @@ void PmergeMe::RecurMergeInsertionSort(std::vector<PmergeNode *> &v) {
   RecurMergeInsertionSort(paired_v);
   if (v.size() % 2 != 0) {
     // vのあまりを挿入
-    BinarySearchInsertionVec(0, vec_main_.size() - 1, v[v.size() - 1]);
+    BinarySearchInsertionVec(0, static_cast<ssize_t>(vec_main_.size() - 1),
+                             v[v.size() - 1]);
   }
   if (vec_main_.size() == nums_.size()) {
     return;
@@ -169,7 +170,8 @@ void PmergeMe::RecurMergeInsertionSort(std::vector<PmergeNode *> &v) {
       }
       // pendのpairを挿入
       PmergeNode *inserting_node = vec_main_[reverse_i]->pop();
-      BinarySearchInsertionVec(0, reverse_i - 1, inserting_node);
+      BinarySearchInsertionVec(0, static_cast<ssize_t>(reverse_i - 1),
+                               inserting_node);
       pend.erase(inserting_node);
       // 挿入するためindexが右にずれる
       ++cur_index;
@@ -258,7 +260,8 @@ void PmergeMe::RecurMergeInsertionSort(std::deque<PmergeNode *> &q) {
   RecurMergeInsertionSort(paired_q);
   if (q.size() % 2 != 0) {
     // あまりを挿入
-    BinarySearchInsertionDq(0, dq_main_.size() - 1, q[q.size() - 1]);
+    BinarySearchInsertionDq(0, static_cast<ssize_t>(dq_main_.size() - 1),
+                            q[q.size() - 1]);
   }
   if (dq_main_.size() == nums_.size()) {
     return;
@@ -292,7 +295,8 @@ void PmergeMe::RecurMergeInsertionSort(std::deque<PmergeNode *> &q) {
       }
       // pendのpairを挿入
       PmergeNode *inserting_node = dq_main_[reverse_i]->pop();
-      BinarySearchInsertionDq(0, reverse_i - 1, inserting_node);
+      BinarySearchInsertionDq(0, static_cast<ssize_t>(reverse_i - 1),
+                              inserting_node);
       pend.erase(inserting_node);
       // 挿入するためindexが右にずれる
       ++cur_index;
