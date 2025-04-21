@@ -88,7 +88,7 @@ void PmergeMe::ParseNums(const std::list<std::string> &nums) {
 }
 
 std::vector<int>
-PmergeMe::MergeInsertionSortV(const std::list<int> *nums = NULL) {
+PmergeMe::MergeInsertionSortVec(const std::list<int> *nums = NULL) {
   if (nums != NULL) {
     nums_ = *nums;
   }
@@ -101,14 +101,14 @@ PmergeMe::MergeInsertionSortV(const std::list<int> *nums = NULL) {
        ++it) {
     v.push_back(new PmergeNode(*it));
   }
-  v_main_.reserve(nums_.size());
+  vec_main_.reserve(nums_.size());
   PmergeNode::cnt_compare = 0;
   RecurMergeInsertionSort(v);
   std::vector<int> re;
   re.reserve(nums_.size());
-  for (size_t i = 0; i < v_main_.size(); ++i) {
-    re.push_back(v_main_[i]->bignum_);
-    delete v_main_[i];
+  for (size_t i = 0; i < vec_main_.size(); ++i) {
+    re.push_back(vec_main_[i]->bignum_);
+    delete vec_main_[i];
   }
   return re;
 }
@@ -116,8 +116,8 @@ PmergeMe::MergeInsertionSortV(const std::list<int> *nums = NULL) {
 void PmergeMe::RecurMergeInsertionSort(std::vector<PmergeNode *> &v) {
   if (v.size() < 2) {
     PmergeNode *p = v.front();
-    v_main_.push_back(p->pop());
-    v_main_.push_back(p);
+    vec_main_.push_back(p->pop());
+    vec_main_.push_back(p);
     return;
   }
   std::vector<PmergeNode *> paired_v;
@@ -134,21 +134,21 @@ void PmergeMe::RecurMergeInsertionSort(std::vector<PmergeNode *> &v) {
   RecurMergeInsertionSort(paired_v);
   if (v.size() % 2 != 0) {
     // vのあまりを挿入
-    BinarySearchInsertion(0, v_main_.size() - 1, v[v.size() - 1]);
+    BinarySearchInsertionVec(0, vec_main_.size() - 1, v[v.size() - 1]);
   }
-  if (v_main_.size() == nums_.size()) {
+  if (vec_main_.size() == nums_.size()) {
     return;
   }
 
   // mainに挿入したいnodeのペアを管理
   std::set<const PmergeNode *> pend;
   // 一番低い数字は飛ばす
-  for (std::vector<PmergeNode *>::const_iterator it = v_main_.begin() + 1;
-       it != v_main_.end(); ++it) {
+  for (std::vector<PmergeNode *>::const_iterator it = vec_main_.begin() + 1;
+       it != vec_main_.end(); ++it) {
     pend.insert(*it);
   }
   // 一番低い数字は左端で確定なのではじめに挿入
-  v_main_.insert(v_main_.begin(), v_main_.front()->pop());
+  vec_main_.insert(vec_main_.begin(), vec_main_.front()->pop());
 
   size_t cur_index = 1; // 要素挿入のために進んだ一番右端のindex
   size_t jacob_i = 0;
@@ -156,19 +156,19 @@ void PmergeMe::RecurMergeInsertionSort(std::vector<PmergeNode *> &v) {
   // pendのペアをすべてmainに挿入する
   while (cnt_inserted < pend.size()) {
     cur_index =
-        std::min(cur_index + jacob_stahal_seq[jacob_i], v_main_.size() - 1);
+        std::min(cur_index + jacob_stahal_seq[jacob_i], vec_main_.size() - 1);
     size_t jacob_cnt =
         jacob_stahal_seq[jacob_i]; // countが0になるまで要素を挿入
     ++jacob_i;
     size_t reverse_i = cur_index; // 挿入するnodeのindex
     while (jacob_cnt != 0) {
-      if (pend.find(v_main_[reverse_i]) == pend.end()) {
+      if (pend.find(vec_main_[reverse_i]) == pend.end()) {
         --reverse_i;
         continue;
       }
       // pendのpairを挿入
-      PmergeNode *inserting_node = v_main_[reverse_i]->pop();
-      BinarySearchInsertion(0, reverse_i - 1, inserting_node);
+      PmergeNode *inserting_node = vec_main_[reverse_i]->pop();
+      BinarySearchInsertionVec(0, reverse_i - 1, inserting_node);
       pend.erase(inserting_node);
       // 挿入するためindexが右にずれる
       ++cur_index;
@@ -181,17 +181,17 @@ void PmergeMe::RecurMergeInsertionSort(std::vector<PmergeNode *> &v) {
   }
 }
 
-void PmergeMe::BinarySearchInsertion(ssize_t start, ssize_t end,
-                                     PmergeNode *key) {
+void PmergeMe::BinarySearchInsertionVec(ssize_t start, ssize_t end,
+                                        PmergeNode *key) {
   while (start <= end) {
     size_t middle = start + (end - start) / 2;
-    if (*key < *v_main_[middle]) {
+    if (*key < *vec_main_[middle]) {
       end = middle - 1;
     } else {
       start = middle + 1;
     }
   }
-  v_main_.insert(v_main_.begin() + start, key);
+  vec_main_.insert(vec_main_.begin() + start, key);
 }
 
 void PmergeMe::SortAndPrint() {
@@ -203,7 +203,7 @@ void PmergeMe::SortAndPrint() {
   }
   std::cout << '\n';
   gettimeofday(&start, NULL);
-  std::vector<int> v = MergeInsertionSortV();
+  std::vector<int> v = MergeInsertionSortVec();
   gettimeofday(&end, NULL);
   std::cout << "After : ";
   for (std::vector<int>::const_iterator it = v.begin(); it != v.end(); ++it) {

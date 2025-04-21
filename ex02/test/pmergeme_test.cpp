@@ -35,7 +35,7 @@ TEST(mis_test, vec_one_element1) {
   PmergeMe p;
   std::list<int> list = {1};
 
-  std::vector<int> actual = p.MergeInsertionSortV(&list);
+  std::vector<int> actual = p.MergeInsertionSortVec(&list);
   std::vector<int> expect(list.begin(), list.end());
   std::sort(expect.begin(), expect.end());
   EXPECT_EQ(actual, expect);
@@ -45,7 +45,7 @@ TEST(mis_test, vec_one_element2) {
   PmergeMe p;
   std::list<int> list = {-100};
 
-  std::vector<int> actual = p.MergeInsertionSortV(&list);
+  std::vector<int> actual = p.MergeInsertionSortVec(&list);
   std::vector<int> expect(list.begin(), list.end());
   std::sort(expect.begin(), expect.end());
   EXPECT_EQ(actual, expect);
@@ -55,7 +55,7 @@ TEST(mis_test, vec_one_element3) {
   PmergeMe p;
   std::list<int> list = {0};
 
-  std::vector<int> actual = p.MergeInsertionSortV(&list);
+  std::vector<int> actual = p.MergeInsertionSortVec(&list);
   std::vector<int> expect(list.begin(), list.end());
   std::sort(expect.begin(), expect.end());
   EXPECT_EQ(actual, expect);
@@ -66,7 +66,7 @@ TEST(mis_test, vec_two_elements) {
     PmergeMe p;
     std::list<int> list = test::GenerateRandomList(2);
 
-    std::vector<int> actual = p.MergeInsertionSortV(&list);
+    std::vector<int> actual = p.MergeInsertionSortVec(&list);
     std::vector<int> expect(list.begin(), list.end());
     std::sort(expect.begin(), expect.end());
     EXPECT_EQ(actual, expect);
@@ -78,7 +78,7 @@ TEST(mis_test, vec_three_elements) {
     PmergeMe p;
     std::list<int> list = test::GenerateRandomList(3);
 
-    std::vector<int> actual = p.MergeInsertionSortV(&list);
+    std::vector<int> actual = p.MergeInsertionSortVec(&list);
     std::vector<int> expect(list.begin(), list.end());
     std::sort(expect.begin(), expect.end());
     EXPECT_EQ(actual, expect);
@@ -90,7 +90,7 @@ TEST(mis_test, vec_four_elements) {
     PmergeMe p;
     std::list<int> list = test::GenerateRandomList(4);
 
-    std::vector<int> actual = p.MergeInsertionSortV(&list);
+    std::vector<int> actual = p.MergeInsertionSortVec(&list);
     std::vector<int> expect(list.begin(), list.end());
     std::sort(expect.begin(), expect.end());
     EXPECT_EQ(actual, expect);
@@ -102,7 +102,7 @@ TEST(mis_test, vec_five_elements) {
     PmergeMe p;
     std::list<int> list = test::GenerateRandomList(5);
 
-    std::vector<int> actual = p.MergeInsertionSortV(&list);
+    std::vector<int> actual = p.MergeInsertionSortVec(&list);
     std::vector<int> expect(list.begin(), list.end());
     std::sort(expect.begin(), expect.end());
     EXPECT_EQ(actual, expect);
@@ -114,7 +114,7 @@ TEST(mis_test, vec_threethousands_elements) {
     PmergeMe p;
     std::list<int> list = test::GenerateRandomList(3000);
 
-    std::vector<int> actual = p.MergeInsertionSortV(&list);
+    std::vector<int> actual = p.MergeInsertionSortVec(&list);
     std::vector<int> expect(list.begin(), list.end());
     std::sort(expect.begin(), expect.end());
     EXPECT_EQ(actual, expect);
@@ -126,7 +126,7 @@ TEST(mis_test, vec_tenthousands_elements) {
     PmergeMe p;
     std::list<int> list = test::GenerateRandomList(10000);
 
-    std::vector<int> actual = p.MergeInsertionSortV(&list);
+    std::vector<int> actual = p.MergeInsertionSortVec(&list);
     std::vector<int> expect(list.begin(), list.end());
     std::sort(expect.begin(), expect.end());
     EXPECT_EQ(actual, expect);
