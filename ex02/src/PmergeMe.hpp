@@ -61,11 +61,13 @@ private:
   void ParseNums(const std::list<std::string> &nums);
   void RecurMergeInsertionSort(std::vector<PmergeNode *> &v);
   void BinarySearchInsertionVec(ssize_t start, ssize_t end, PmergeNode *key);
+  void RecurMergeInsertionSort(std::deque<PmergeNode *> &q);
+  void BinarySearchInsertionDq(ssize_t start, ssize_t end, PmergeNode *key);
   double CalcElapsedus(const timeval &start, const timeval &end);
 
   std::list<int> nums_;
   std::vector<PmergeNode *> vec_main_;
-  std::deque<PmergeNode> dq_main_;
+  std::deque<PmergeNode *> dq_main_;
   static const size_t jacob_stahal_seq[];
 };
 

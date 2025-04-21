@@ -1,6 +1,7 @@
 #include "PmergeMe.hpp"
 #include <algorithm>
 #include <cstddef>
+#include <deque>
 #include <iostream>
 #include <list>
 #include <set>
@@ -194,6 +195,107 @@ void PmergeMe::BinarySearchInsertionVec(ssize_t start, ssize_t end,
   vec_main_.insert(vec_main_.begin() + start, key);
 }
 
+std::deque<int> PmergeMe::MergeInsertionSortDq(const std::list<int> *nums) {
+  if (nums != NULL) {
+    nums_ = *nums;
+  }
+  std::deque<PmergeNode *> q;
+  if (nums_.size() == 1) {
+    return std::deque<int>(nums_.begin(), nums_.end());
+  }
+  for (std::list<int>::const_iterator it = nums_.begin(); it != nums_.end();
+       ++it) {
+    q.push_back(new PmergeNode(*it));
+  }
+  PmergeNode::cnt_compare = 0;
+  RecurMergeInsertionSort(q);
+  std::deque<int> re;
+  for (size_t i = 0; i < dq_main_.size(); ++i) {
+    re.push_back(dq_main_[i]->bignum_);
+    delete dq_main_[i];
+  }
+  return re;
+}
+
+void PmergeMe::RecurMergeInsertionSort(std::deque<PmergeNode *> &q) {
+  if (q.size() < 2) {
+    PmergeNode *p = q.front();
+    dq_main_.push_back(p->pop());
+    dq_main_.push_back(p);
+    return;
+  }
+  std::deque<PmergeNode *> paired_q;
+  for (size_t i = 0; i + 1 < q.size(); i += 2) {
+    if (*q[i] > *q[i + 1]) {
+      q[i]->push(q[i + 1]);
+      paired_q.push_back(q[i]);
+    } else {
+      q[i + 1]->push(q[i]);
+      paired_q.push_back(q[i + 1]);
+    }
+  }
+  RecurMergeInsertionSort(paired_q);
+  if (q.size() % 2 != 0) {
+    // あまりを挿入
+    BinarySearchInsertionVec(0, dq_main_.size() - 1, q[q.size() - 1]);
+  }
+  if (dq_main_.size() == nums_.size()) {
+    return;
+  }
+
+  // mainに挿入したいnodeのペアを管理
+  std::set<const PmergeNode *> pend;
+  // 一番低い数字は飛ばす
+  for (std::deque<PmergeNode *>::const_iterator it = dq_main_.begin() + 1;
+       it != dq_main_.end(); ++it) {
+    pend.insert(*it);
+  }
+  // 一番低い数字は左端で確定なのではじめに挿入
+  dq_main_.push_front(dq_main_.front()->pop());
+
+  size_t cur_index = 1; // 要素挿入のために進んだ一番右端のindex
+  size_t jacob_i = 0;
+  size_t cnt_inserted = 0;
+  // pendのペアをすべてmainに挿入する
+  while (cnt_inserted < pend.size()) {
+    cur_index =
+        std::min(cur_index + jacob_stahal_seq[jacob_i], dq_main_.size() - 1);
+    size_t jacob_cnt =
+        jacob_stahal_seq[jacob_i]; // countが0になるまで要素を挿入
+    ++jacob_i;
+    size_t reverse_i = cur_index; // 挿入するnodeのindex
+    while (jacob_cnt != 0) {
+      if (pend.find(dq_main_[reverse_i]) == pend.end()) {
+        --reverse_i;
+        continue;
+      }
+      // pendのpairを挿入
+      PmergeNode *inserting_node = dq_main_[reverse_i]->pop();
+      BinarySearchInsertionVec(0, reverse_i - 1, inserting_node);
+      pend.erase(inserting_node);
+      // 挿入するためindexが右にずれる
+      ++cur_index;
+      --jacob_cnt;
+      ++cnt_inserted;
+      if (cnt_inserted >= pend.size()) {
+        break;
+      }
+    }
+  }
+}
+
+void PmergeMe::BinarySearchInsertionDq(ssize_t start, ssize_t end,
+                                       PmergeNode *key) {
+  while (start <= end) {
+    size_t middle = start + (end - start) / 2;
+    if (*key < *dq_main_[middle]) {
+      end = middle - 1;
+    } else {
+      start = middle + 1;
+    }
+  }
+  dq_main_.insert(dq_main_.begin() + start, key);
+}
 void PmergeMe::SortAndPrint() {
   timeval start, end;
   std::cout << "Before: ";
