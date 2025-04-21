@@ -335,8 +335,11 @@ void PmergeMe::BinarySearchInsertionDq(ssize_t start, ssize_t end,
     size_t middle = static_cast<size_t>(start + (end - start) / 2);
     if (*key < *dq_main_[middle]) {
       end = static_cast<ssize_t>(middle) - 1;
-    } else {
+    } else if (*key > *dq_main_[middle]) {
       start = static_cast<ssize_t>(middle) + 1;
+    } else {
+      ++start;
+      break;
     }
   }
   dq_main_.insert(dq_main_.begin() + start, key);
