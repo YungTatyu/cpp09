@@ -47,8 +47,11 @@ fclean: clean
 
 re: fclean all
 
+TEST_FILTER ?= '*'
 test:
-	echo test
+	cmake -S . -B $(BUILD_DIR)
+	cmake --build $(BUILD_DIR)
+	$(BUILD_DIR)/gtest-googletest --gtest_filter=$(TEST_FILTER)
 
 debug: CXXFLAGS += -fsanitize=address -g 
 debug: all
