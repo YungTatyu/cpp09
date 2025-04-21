@@ -195,7 +195,8 @@ void PmergeMe::BinarySearchInsertionVec(ssize_t start, ssize_t end,
   vec_main_.insert(vec_main_.begin() + start, key);
 }
 
-std::deque<int> PmergeMe::MergeInsertionSortDq(const std::list<int> *nums) {
+std::deque<int>
+PmergeMe::MergeInsertionSortDq(const std::list<int> *nums = NULL) {
   if (nums != NULL) {
     nums_ = *nums;
   }
@@ -237,7 +238,7 @@ void PmergeMe::RecurMergeInsertionSort(std::deque<PmergeNode *> &q) {
   RecurMergeInsertionSort(paired_q);
   if (q.size() % 2 != 0) {
     // あまりを挿入
-    BinarySearchInsertionVec(0, dq_main_.size() - 1, q[q.size() - 1]);
+    BinarySearchInsertionDq(0, dq_main_.size() - 1, q[q.size() - 1]);
   }
   if (dq_main_.size() == nums_.size()) {
     return;
@@ -271,7 +272,7 @@ void PmergeMe::RecurMergeInsertionSort(std::deque<PmergeNode *> &q) {
       }
       // pendのpairを挿入
       PmergeNode *inserting_node = dq_main_[reverse_i]->pop();
-      BinarySearchInsertionVec(0, reverse_i - 1, inserting_node);
+      BinarySearchInsertionDq(0, reverse_i - 1, inserting_node);
       pend.erase(inserting_node);
       // 挿入するためindexが右にずれる
       ++cur_index;
@@ -315,7 +316,20 @@ void PmergeMe::SortAndPrint() {
   double elapsed_us = CalcElapsedus(start, end);
   std::cout << "Time to process a range of " << v.size()
             << " elements with std::vector : " << elapsed_us << " us\n";
-  std::cout << "count compare: " << PmergeNode::cnt_compare << '\n';
+  size_t cnt_vector = PmergeNode::cnt_compare;
+
+  gettimeofday(&start, NULL);
+  std::deque<int> q = MergeInsertionSortDq();
+  gettimeofday(&end, NULL);
+  elapsed_us = CalcElapsedus(start, end);
+  std::cout << "Time to process a range of " << v.size()
+            << " elements with std::deque  : " << elapsed_us << " us\n";
+
+  std::cout << "Compare counts to process a range of " << v.size()
+            << " elements with std::vector : " << cnt_vector << "\n";
+  std::cout << "Compare counts to process a range of " << q.size()
+            << " elements with std::deque  : " << PmergeNode::cnt_compare
+            << "\n";
 }
 
 double PmergeMe::CalcElapsedus(const timeval &start, const timeval &end) {
