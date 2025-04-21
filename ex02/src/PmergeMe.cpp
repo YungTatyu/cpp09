@@ -123,7 +123,7 @@ void PmergeMe::RecurMergeInsertionSort(std::vector<PmergeNode *> &v) {
   std::vector<PmergeNode *> paired_v;
   paired_v.reserve(v.size() / 2);
   for (size_t i = 0; i + 1 < v.size(); i += 2) {
-    if (v[i]->bignum_ > v[i + 1]->bignum_) {
+    if (*v[i] > *v[i + 1]) {
       v[i]->push(v[i + 1]);
       paired_v.push_back(v[i]);
     } else {
