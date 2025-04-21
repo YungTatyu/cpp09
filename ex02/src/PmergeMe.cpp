@@ -182,6 +182,26 @@ void PmergeMe::RecurMergeInsertionSort(std::vector<PmergeNode *> &v) {
   }
 }
 
+/**
+ * @brief std::vector に対して二分探索を行い、指定された key
+ * を適切な位置に挿入する。
+ *
+ * この関数ではインデックスとして ssize_t を使用しています。
+ * 通常、コンテナのサイズやインデックスには size_t を使うべきですが、
+ * 二分探索の過程で end = middle - 1 により -1 になる可能性があるため、
+ * 負の値も扱える ssize_t を使用しています。
+ *
+ * WARN:
+ * 特に 64bit 環境では size_t の最大値（2^64 - 1）を ssize_t（2^63 -
+ * 1）では表現しきれません。 このため、size_t から ssize_t
+ * への変換時にオーバーフローが発生する可能性があります。
+ * 本関数はインデックス（およびコンテナのサイズ）が `ssize_t` の最大値を超える
+ * ような大規模データには対応していません。
+ *
+ * @param start 探索開始インデックス（ssize_t）
+ * @param end 探索終了インデックス（ssize_t）
+ * @param key 挿入すべき要素（PmergeNode*）
+ */
 void PmergeMe::BinarySearchInsertionVec(ssize_t start, ssize_t end,
                                         PmergeNode *key) {
   while (start <= end) {
@@ -285,6 +305,26 @@ void PmergeMe::RecurMergeInsertionSort(std::deque<PmergeNode *> &q) {
   }
 }
 
+/**
+ * @brief std::deque に対して二分探索を行い、指定された key
+ * を適切な位置に挿入する。
+ *
+ * この関数ではインデックスとして ssize_t を使用しています。
+ * 通常、コンテナのサイズやインデックスには size_t を使うべきですが、
+ * 二分探索の過程で end = middle - 1 により -1 になる可能性があるため、
+ * 負の値も扱える ssize_t を使用しています。
+ *
+ * WARN:
+ * 特に 64bit 環境では size_t の最大値（2^64 - 1）を ssize_t（2^63 -
+ * 1）では表現しきれません。 このため、size_t から ssize_t
+ * への変換時にオーバーフローが発生する可能性があります。
+ * 本関数はインデックス（およびコンテナのサイズ）が `ssize_t` の最大値を超える
+ * ような大規模データには対応していません。
+ *
+ * @param start 探索開始インデックス（ssize_t）
+ * @param end 探索終了インデックス（ssize_t）
+ * @param key 挿入すべき要素（PmergeNode*）
+ */
 void PmergeMe::BinarySearchInsertionDq(ssize_t start, ssize_t end,
                                        PmergeNode *key) {
   while (start <= end) {
