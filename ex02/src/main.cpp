@@ -6,7 +6,6 @@ void usage(const std::string &str) { std::cerr << "usage: " << str << "\n"; }
 
 int main(int argc, char *argv[]) {
   if (argc < 2) {
-    std::cerr << argv[0] << " numbers\n";
     usage(std::string(argv[0]) + " numbers");
     return 1;
   }
@@ -16,7 +15,6 @@ int main(int argc, char *argv[]) {
     p.SortAndPrint();
   } catch (const std::exception &e) {
     std::cerr << e.what() << "\n";
-    usage(std::string(argv[0]) + " numbers");
     return 1;
   }
   return 0;
