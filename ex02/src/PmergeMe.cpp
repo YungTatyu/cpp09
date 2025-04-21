@@ -10,6 +10,8 @@
 #include <sys/time.h>
 #include <vector>
 
+size_t PmergeNode::cnt_compare = 0;
+
 const size_t PmergeMe::jacob_stahal_seq[] = {
     1UL * 2,
     1UL * 2,
@@ -100,6 +102,7 @@ PmergeMe::MergeInsertionSortV(const std::list<int> *nums = NULL) {
     v.push_back(new PmergeNode(*it));
   }
   v_main_.reserve(nums_.size());
+  PmergeNode::cnt_compare = 0;
   RecurMergeInsertionSort(v);
   std::vector<int> re;
   re.reserve(nums_.size());
@@ -210,6 +213,7 @@ void PmergeMe::SortAndPrint() {
   double elapsed_us = CalcElapsedus(start, end);
   std::cout << "Time to process a range of " << v.size()
             << " elements with std::vector : " << elapsed_us << " us\n";
+  std::cout << "count compare: " << PmergeNode::cnt_compare << '\n';
 }
 
 double PmergeMe::CalcElapsedus(const timeval &start, const timeval &end) {

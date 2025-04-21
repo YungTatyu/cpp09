@@ -15,9 +15,11 @@ public:
   PmergeNode(int v) { bignum_ = v; }
   ~PmergeNode() {}
   bool operator>(const PmergeNode &other) const {
+    ++cnt_compare;
     return bignum_ > other.bignum_;
   }
   bool operator<(const PmergeNode &other) const {
+    ++cnt_compare;
     return bignum_ < other.bignum_;
   }
   void push(PmergeNode *node) { pairs_.push(node); }
@@ -30,6 +32,7 @@ public:
 
   int bignum_;
   std::stack<PmergeNode *> pairs_;
+  static size_t cnt_compare;
 
 private:
   PmergeNode();
