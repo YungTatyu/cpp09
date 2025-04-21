@@ -1,6 +1,7 @@
 #ifndef PMERGE_ME_HPP
 #define PMERGE_ME_HPP
 
+#include <bits/types/struct_timeval.h>
 #include <cstddef>
 #include <deque>
 #include <list>
@@ -57,6 +58,7 @@ private:
   void ParseNums(const std::list<std::string> &nums);
   void RecurMergeInsertionSort(std::vector<PmergeNode *> &v);
   void BinarySearchInsertion(ssize_t start, ssize_t end, PmergeNode *key);
+  double CalcElapsedus(const timeval &start, const timeval &end);
 
   std::list<int> nums_;
   std::vector<PmergeNode *> v_main_;

@@ -7,6 +7,7 @@
 #include <sstream>
 #include <stdexcept>
 #include <string>
+#include <sys/time.h>
 #include <vector>
 
 const size_t PmergeMe::jacob_stahal_seq[] = {
@@ -191,9 +192,28 @@ void PmergeMe::BinarySearchInsertion(ssize_t start, ssize_t end,
 }
 
 void PmergeMe::SortAndPrint() {
+  timeval start, end;
+  std::cout << "Before: ";
+  for (std::list<int>::const_iterator it = nums_.begin(); it != nums_.end();
+       ++it) {
+    std::cout << *it << ' ';
+  }
+  std::cout << '\n';
+  gettimeofday(&start, NULL);
   std::vector<int> v = MergeInsertionSortV();
+  gettimeofday(&end, NULL);
+  std::cout << "After : ";
   for (std::vector<int>::const_iterator it = v.begin(); it != v.end(); ++it) {
     std::cout << *it << ' ';
   }
   std::cout << '\n';
+  double elapsed_us = CalcElapsedus(start, end);
+  std::cout << "Time to process a range of " << v.size()
+            << " elements with std::vector : " << elapsed_us << " us\n";
+}
+
+double PmergeMe::CalcElapsedus(const timeval &start, const timeval &end) {
+  long seconds = end.tv_sec - start.tv_sec;
+  long micros = end.tv_usec - start.tv_usec;
+  return static_cast<double>(seconds) * 1e6 + static_cast<double>(micros);
 }
