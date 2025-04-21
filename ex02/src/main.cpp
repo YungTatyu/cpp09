@@ -6,7 +6,7 @@ void usage(const std::string &str) { std::cerr << "usage: " << str << "\n"; }
 
 int main(int argc, char *argv[]) {
   if (argc < 2) {
-    usage(std::string(argv[0]) + " numbers");
+    usage(std::string(argv[0]) + " <numbers>");
     return 1;
   }
   try {
